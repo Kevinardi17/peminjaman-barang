@@ -19,10 +19,7 @@
 
             <nav class="flex-1 px-4 py-4 space-y-2">
                 <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Dashboard</a>
-
-                @if(auth()->user()->isSuperadmin())
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Jurusan</a>
-                @endif
+                <a href="{{ route('jurusan.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Jurusan</a>
 
                 @if(auth()->user()->isSuperadmin() || auth()->user()->isAdminJurusan())
                     <a href="{{ route('management-user.index') }}"

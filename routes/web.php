@@ -11,10 +11,23 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\ManagementUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\JurusanController;
 
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/jurusan', [JurusanController::class, 'index'])->name('jurusan.index');
+});
+
+Route::middleware(['role:superadmin'])->group(function () {
+    Route::get('/jurusan/create', [JurusanController::class, 'create'])->name('jurusan.create');
+    Route::post('/jurusan', [JurusanController::class, 'store'])->name('jurusan.store');
+    Route::get('/jurusan/{jurusan}/edit', [JurusanController::class, 'edit'])->name('jurusan.edit');
+    Route::put('/jurusan/{jurusan}', [JurusanController::class, 'update'])->name('jurusan.update');
+    Route::delete('/jurusan/{jurusan}', [JurusanController::class, 'destroy'])->name('jurusan.destroy');
 });
 
 Route::middleware(['auth'])->group(function () {
