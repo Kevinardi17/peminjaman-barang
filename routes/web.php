@@ -9,11 +9,15 @@ use App\Models\Peminjaman;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\ManagementUserController;
+use App\Http\Controllers\ProfileController;
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/profil', [ProfileController::class, 'edit'])->name('profil.edit');
+Route::put('/profil', [ProfileController::class, 'update'])->name('profil.update');
 
 Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
     Route::resource('management-user', ManagementUserController::class)->except(['show']);
