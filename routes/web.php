@@ -8,10 +8,15 @@ use App\Models\Kategori;
 use App\Models\Peminjaman;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\ManagementUserController;
 
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
+    Route::resource('management-user', ManagementUserController::class)->except(['show']);
 });
 
 Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {

@@ -23,7 +23,7 @@
                 @endif
 
                 @if(auth()->user()->isSuperadmin() || auth()->user()->isAdminJurusan())
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Management User</a>
+                    <a href="{{ route('management-user.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Management User</a>
                     <a href="{{ route('kategori.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Kategori</a>
                     <a href="{{ route('barang.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Barang</a>
                     <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Peminjaman</a>
