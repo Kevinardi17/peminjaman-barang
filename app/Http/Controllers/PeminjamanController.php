@@ -76,15 +76,21 @@ class PeminjamanController extends Controller
             ]);
 
             foreach ($request->barang_id as $index => $barangId) {
+                if (!isset($request->jumlah[$index]))
+                    continue;
+
                 $barang = Barang::findOrFail($barangId);
                 $jumlah = (int) $request->jumlah[$index];
+
+                if ($jumlah <= 0)
+                    continue;
 
                 if ($barang->jurusan_id != $request->jurusan_tujuan_id) {
                     abort(422, 'Barang harus sesuai jurusan tujuan.');
                 }
 
                 if ($jumlah > $barang->stok) {
-                    abort(422, 'Jumlah pinjam melebihi stok tersedia.');
+                    abort(422, "Stok {$barang->nama_barang} tidak cukup.");
                 }
 
                 DetailPeminjaman::create([
