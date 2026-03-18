@@ -210,4 +210,51 @@ class PeminjamanController extends Controller
         return back()->with('success', 'Barang berhasil dikembalikan.');
     }
 
+    public function riwayat(Request $request)
+    {
+        $user = auth()->user();
+
+        $query = Peminjaman::with(['user', 'jurusanTujuan'])
+            ->whereIn('status', ['dikembalikan', 'ditolak']);
+
+        if ($user->role === 'peminjam') {
+            $query->where('user_id', $user->id);
+        }
+
+        if ($user->role === 'admin_jurusan') {
+            $query->where('jurusan_tujuan_id', $user->jurusan_id);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('no_peminjaman', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $riwayats = $query->latest()->paginate(10)->withQueryString();
+
+        return view('riwayat.index', compact('riwayats'));
+    }
+
+    public function destroyRiwayat(Peminjaman $peminjaman)
+    {
+        $user = auth()->user();
+
+        if (!in_array($peminjaman->status, ['dikembalikan', 'ditolak'])) {
+            return back()->with('error', 'Hanya riwayat selesai yang dapat dihapus.');
+        }
+
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
+        $peminjaman->delete();
+
+        return redirect()->route('riwayat.index')->with('success', 'Riwayat berhasil dihapus.');
+    }
+
 }

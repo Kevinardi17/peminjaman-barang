@@ -17,6 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/riwayat', [PeminjamanController::class, 'riwayat'])->name('riwayat.index');
+});
+
+Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
+    Route::delete('/riwayat/{peminjaman}', [PeminjamanController::class, 'destroyRiwayat'])->name('riwayat.destroy');
+});
+
 Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
     Route::get('/pengembalian', [PeminjamanController::class, 'pengembalianIndex'])->name('pengembalian.index');
     Route::post('/pengembalian/{peminjaman}', [PeminjamanController::class, 'kembalikan'])->name('pengembalian.kembalikan');

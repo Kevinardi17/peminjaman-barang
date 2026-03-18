@@ -34,7 +34,7 @@
                         class="block px-4 py-2 rounded-lg hover:bg-slate-800">Peminjaman</a>
                     <a href="{{ route('pengembalian.index') }}"
                         class="block px-4 py-2 rounded-lg hover:bg-slate-800">Pengembalian</a>
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat</a>
+                    <a href="{{ route('riwayat.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat</a>
                 @endif
 
                 @if(auth()->user()->isPeminjam())
@@ -42,8 +42,10 @@
                         Peminjaman</a>
                     <a href="{{ route('peminjaman.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Status
                         Peminjaman</a>
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat Peminjaman</a>
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat Pengembalian</a>
+                    <a href="{{ route('riwayat.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat
+                        Peminjaman</a>
+                    <a href="{{ route('riwayat.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat
+                        Pengembalian</a>
                 @endif
 
                 <a href="{{ route('profil.edit') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Profil</a>
