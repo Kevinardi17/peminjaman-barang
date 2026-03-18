@@ -96,4 +96,54 @@ class PeminjamanController extends Controller
 
         return redirect()->route('peminjaman.index')->with('success', 'Pengajuan peminjaman berhasil dibuat.');
     }
+    public function approve(Peminjaman $peminjaman)
+    {
+        $user = auth()->user();
+
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
+        if ($peminjaman->status !== 'menunggu') {
+            return back()->with('error', 'Status tidak valid.');
+        }
+
+        \DB::transaction(function () use ($peminjaman, $user) {
+            foreach ($peminjaman->details as $detail) {
+                $barang = $detail->barang;
+
+                if ($detail->jumlah > $barang->stok) {
+                    abort(422, 'Stok tidak cukup.');
+                }
+
+                $barang->decrement('stok', $detail->jumlah);
+            }
+
+            $peminjaman->update([
+                'status' => 'dipinjam',
+                'petugas_peminjaman_id' => $user->id,
+            ]);
+        });
+
+        return back()->with('success', 'Peminjaman disetujui.');
+    }
+    public function reject(Request $request, Peminjaman $peminjaman)
+    {
+        $request->validate([
+            'alasan_penolakan' => ['required', 'string']
+        ]);
+
+        $peminjaman->update([
+            'status' => 'ditolak',
+            'alasan_penolakan' => $request->alasan_penolakan
+        ]);
+
+        return back()->with('success', 'Peminjaman ditolak.');
+    }
+
+    public function print(Peminjaman $peminjaman)
+    {
+        return view('peminjaman.print', compact('peminjaman'));
+    }
+
 }

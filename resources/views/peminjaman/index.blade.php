@@ -13,7 +13,8 @@
             </form>
 
             @if(auth()->user()->role === 'peminjam')
-                <a href="{{ route('peminjaman.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Ajukan Peminjaman</a>
+                <a href="{{ route('peminjaman.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Ajukan
+                    Peminjaman</a>
             @endif
         </div>
 
@@ -28,6 +29,7 @@
                         <th class="px-4 py-3 border text-left">Tanggal Pinjam</th>
                         <th class="px-4 py-3 border text-left">Rencana Kembali</th>
                         <th class="px-4 py-3 border text-left">Status</th>
+                        <th class="px-4 py-3 border text-left">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,10 +42,34 @@
                             <td class="px-4 py-3 border">{{ $item->tanggal_pinjam }}</td>
                             <td class="px-4 py-3 border">{{ $item->tanggal_rencana_kembali }}</td>
                             <td class="px-4 py-3 border">{{ ucfirst($item->status) }}</td>
+                            <td class="px-4 py-3 border">
+                                <div class="flex gap-2 flex-wrap">
+                                    @if($item->status === 'menunggu' && auth()->user()->role !== 'peminjam')
+                                        <form action="{{ route('peminjaman.approve', $item) }}" method="POST">
+                                            @csrf
+                                            <button class="px-3 py-1 bg-green-600 text-white rounded">Approve</button>
+                                        </form>
+
+                                        <form action="{{ route('peminjaman.reject', $item) }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="alasan_penolakan" value="Ditolak oleh admin">
+                                            <button class="px-3 py-1 bg-red-600 text-white rounded">Tolak</button>
+                                        </form>
+                                    @endif
+
+                                    @if($item->status === 'dipinjam')
+                                        <a href="{{ route('peminjaman.print', $item) }}" target="_blank"
+                                            class="px-3 py-1 bg-blue-600 text-white rounded">
+                                            Print
+                                        </a>
+                                    @endif
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-4 py-4 border text-center text-slate-500">Belum ada data peminjaman.</td>
+                            <td colspan="7" class="px-4 py-4 border text-center text-slate-500">Belum ada data peminjaman.
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>
