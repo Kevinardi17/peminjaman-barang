@@ -18,6 +18,11 @@ Route::get('/', function () {
 });
 
 Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
+    Route::get('/pengembalian', [PeminjamanController::class, 'pengembalianIndex'])->name('pengembalian.index');
+    Route::post('/pengembalian/{peminjaman}', [PeminjamanController::class, 'kembalikan'])->name('pengembalian.kembalikan');
+});
+
+Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
     Route::post('/peminjaman/{peminjaman}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
     Route::post('/peminjaman/{peminjaman}/reject', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');
     Route::get('/peminjaman/{peminjaman}/print', [PeminjamanController::class, 'print'])->name('peminjaman.print');

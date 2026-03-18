@@ -45,8 +45,10 @@
                             <td class="px-4 py-3 border">
                                 <div class="flex gap-2 flex-wrap">
                                     @if($item->status === 'menunggu' && auth()->user()->role !== 'peminjam')
-                                        <form action="{{ route('peminjaman.approve', $item) }}" method="POST">
+                                        <form action="{{ route('peminjaman.approve', $item) }}" method="POST"
+                                            enctype="multipart/form-data" class="flex items-center gap-2">
                                             @csrf
+                                            <input type="file" name="foto_peminjaman" required class="text-sm">
                                             <button class="px-3 py-1 bg-green-600 text-white rounded">Approve</button>
                                         </form>
 

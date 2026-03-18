@@ -32,7 +32,8 @@
                     <a href="{{ route('barang.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Barang</a>
                     <a href="{{ route('peminjaman.index') }}"
                         class="block px-4 py-2 rounded-lg hover:bg-slate-800">Peminjaman</a>
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Pengembalian</a>
+                    <a href="{{ route('pengembalian.index') }}"
+                        class="block px-4 py-2 rounded-lg hover:bg-slate-800">Pengembalian</a>
                     <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat</a>
                 @endif
 

@@ -8,6 +8,7 @@ use App\Models\Jurusan;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PeminjamanController extends Controller
 {
@@ -96,7 +97,7 @@ class PeminjamanController extends Controller
 
         return redirect()->route('peminjaman.index')->with('success', 'Pengajuan peminjaman berhasil dibuat.');
     }
-    public function approve(Peminjaman $peminjaman)
+    public function approve(Request $request, Peminjaman $peminjaman)
     {
         $user = auth()->user();
 
@@ -108,7 +109,11 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Status tidak valid.');
         }
 
-        \DB::transaction(function () use ($peminjaman, $user) {
+        $request->validate([
+            'foto_peminjaman' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+        ]);
+
+        DB::transaction(function () use ($request, $peminjaman, $user) {
             foreach ($peminjaman->details as $detail) {
                 $barang = $detail->barang;
 
@@ -119,9 +124,12 @@ class PeminjamanController extends Controller
                 $barang->decrement('stok', $detail->jumlah);
             }
 
+            $fotoPath = $request->file('foto_peminjaman')->store('peminjaman', 'public');
+
             $peminjaman->update([
                 'status' => 'dipinjam',
                 'petugas_peminjaman_id' => $user->id,
+                'foto_peminjaman' => $fotoPath,
             ]);
         });
 
@@ -144,6 +152,62 @@ class PeminjamanController extends Controller
     public function print(Peminjaman $peminjaman)
     {
         return view('peminjaman.print', compact('peminjaman'));
+    }
+
+    public function pengembalianIndex()
+    {
+        $user = auth()->user();
+
+        $query = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang'])
+            ->where('status', 'dipinjam');
+
+        if ($user->role === 'admin_jurusan') {
+            $query->where('jurusan_tujuan_id', $user->jurusan_id);
+        }
+
+        $peminjamans = $query->latest()->paginate(10);
+
+        return view('pengembalian.index', compact('peminjamans'));
+    }
+
+    public function kembalikan(Request $request, Peminjaman $peminjaman)
+    {
+        $user = auth()->user();
+
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
+        if ($peminjaman->status !== 'dipinjam') {
+            return back()->with('error', 'Status peminjaman tidak valid.');
+        }
+
+        $request->validate([
+            'foto_pengembalian' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+        ]);
+
+        DB::transaction(function () use ($request, $peminjaman, $user) {
+            foreach ($peminjaman->details as $detail) {
+                $detail->barang->increment('stok', $detail->jumlah);
+            }
+
+            $fotoPath = $request->file('foto_pengembalian')->store('pengembalian', 'public');
+
+            $tanggalKembali = now()->toDateString();
+            $statusKeterlambatan = $tanggalKembali > $peminjaman->tanggal_rencana_kembali
+                ? 'terlambat'
+                : 'tepat_waktu';
+
+            $peminjaman->update([
+                'status' => 'dikembalikan',
+                'tanggal_kembali' => $tanggalKembali,
+                'foto_pengembalian' => $fotoPath,
+                'petugas_pengembalian_id' => $user->id,
+                'status_keterlambatan' => $statusKeterlambatan,
+            ]);
+        });
+
+        return back()->with('success', 'Barang berhasil dikembalikan.');
     }
 
 }
