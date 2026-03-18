@@ -7,9 +7,15 @@ use App\Models\Jurusan;
 use App\Models\Kategori;
 use App\Models\Peminjaman;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\BarangController;
+
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
+    Route::resource('barang', BarangController::class);
 });
 
 Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
