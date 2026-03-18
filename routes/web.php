@@ -6,9 +6,14 @@ use App\Models\Barang;
 use App\Models\Jurusan;
 use App\Models\Kategori;
 use App\Models\Peminjaman;
+use App\Http\Controllers\KategoriController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
+    Route::resource('kategori', KategoriController::class);
 });
 
 Route::middleware(['auth'])->group(function () {
