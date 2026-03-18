@@ -1,11 +1,23 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Dashboard Admin Jurusan
-        </h2>
-    </x-slot>
+<x-dashboard-layout title="Dashboard Admin Jurusan">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl shadow-sm p-5 border">
+            <p class="text-sm text-slate-500">Kategori</p>
+            <h3 class="text-3xl font-bold mt-2">0</h3>
+        </div>
 
-    <div class="p-6">
-        Selamat datang, {{ auth()->user()->name }}
+        <div class="bg-white rounded-2xl shadow-sm p-5 border">
+            <p class="text-sm text-slate-500">Barang</p>
+            <h3 class="text-3xl font-bold mt-2">0</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-5 border">
+            <p class="text-sm text-slate-500">Menunggu</p>
+            <h3 class="text-3xl font-bold mt-2">0</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-5 border">
+            <p class="text-sm text-slate-500">Dipinjam</p>
+            <h3 class="text-3xl font-bold mt-2">0</h3>
+        </div>
     </div>
-</x-app-layout>
+</x-dashboard-layout>
