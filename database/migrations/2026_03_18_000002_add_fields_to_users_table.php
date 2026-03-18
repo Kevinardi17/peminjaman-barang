@@ -9,11 +9,28 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('jurusan_id')->nullable()->after('id')->constrained('jurusans')->nullOnDelete();
+            $table->foreignId('jurusan_id')
+                ->nullable()
+                ->after('id')
+                ->constrained('jurusans')
+                ->nullOnDelete();
+
             $table->string('no_hp')->nullable()->after('email');
-            $table->enum('role', ['superadmin', 'admin_jurusan', 'peminjam'])->default('peminjam')->after('no_hp');
-            $table->enum('jenis_pengguna', ['siswa', 'guru'])->nullable()->after('role');
-            $table->string('asal_kelas_jabatan')->nullable()->after('jenis_pengguna');
+
+            $table->enum('role', [
+                'superadmin',
+                'admin_jurusan',
+                'peminjam'
+            ])->default('peminjam')->after('no_hp');
+
+            $table->enum('jenis_pengguna', [
+                'siswa',
+                'guru'
+            ])->nullable()->after('role');
+
+            $table->string('asal_kelas_jabatan')
+                ->nullable()
+                ->after('jenis_pengguna');
         });
     }
 
@@ -21,6 +38,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropConstrainedForeignId('jurusan_id');
+
             $table->dropColumn([
                 'no_hp',
                 'role',
