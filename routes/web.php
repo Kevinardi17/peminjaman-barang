@@ -10,10 +10,17 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\ManagementUserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PeminjamanController;
 
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
+    Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');
+    Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
 });
 
 Route::get('/profil', [ProfileController::class, 'edit'])->name('profil.edit');

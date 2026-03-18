@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetailPeminjaman extends Model
 {
+    protected $table = 'detail_peminjamans';
     protected $fillable = [
         'peminjaman_id',
         'barang_id',
@@ -21,4 +22,5 @@ class DetailPeminjaman extends Model
     {
         return $this->belongsTo(Barang::class);
     }
+
 }

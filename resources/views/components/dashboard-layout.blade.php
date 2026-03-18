@@ -30,14 +30,17 @@
                     <a href="{{ route('kategori.index') }}"
                         class="block px-4 py-2 rounded-lg hover:bg-slate-800">Kategori</a>
                     <a href="{{ route('barang.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Barang</a>
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Peminjaman</a>
+                    <a href="{{ route('peminjaman.index') }}"
+                        class="block px-4 py-2 rounded-lg hover:bg-slate-800">Peminjaman</a>
                     <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Pengembalian</a>
                     <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat</a>
                 @endif
 
                 @if(auth()->user()->isPeminjam())
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Ajukan Peminjaman</a>
-                    <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Status Peminjaman</a>
+                    <a href="{{ route('peminjaman.create') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Ajukan
+                        Peminjaman</a>
+                    <a href="{{ route('peminjaman.index') }}" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Status
+                        Peminjaman</a>
                     <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat Peminjaman</a>
                     <a href="#" class="block px-4 py-2 rounded-lg hover:bg-slate-800">Riwayat Pengembalian</a>
                 @endif
