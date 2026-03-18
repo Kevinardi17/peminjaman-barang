@@ -19,7 +19,7 @@
             </form>
 
             <a href="{{ route('kategori.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
-                Tambah Kategori
+                + Tambah Kategori
             </a>
         </div>
 
