@@ -1,98 +1,130 @@
 <x-dashboard-layout title="Riwayat">
-    <div class="bg-white rounded-2xl shadow-sm border p-5">
+    <div class="bg-white rounded-2xl shadow-sm border p-6">
         @if(session('success'))
-            <div class="mb-4 rounded-lg bg-green-100 text-green-700 px-4 py-3">
+            <div class="mb-4 rounded-xl bg-green-100 text-green-700 px-4 py-3">
                 {{ session('success') }}
             </div>
         @endif
 
         @if(session('error'))
-            <div class="mb-4 rounded-lg bg-red-100 text-red-700 px-4 py-3">
+            <div class="mb-4 rounded-xl bg-red-100 text-red-700 px-4 py-3">
                 {{ session('error') }}
             </div>
         @endif
 
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-            <form method="GET" action="{{ route('riwayat.index') }}" class="flex gap-2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Filter pencarian..."
-                    class="border rounded-lg px-3 py-2 w-full md:w-72">
-                <button class="px-4 py-2 bg-slate-800 text-white rounded-lg">Cari</button>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+            <form method="GET" action="{{ route('riwayat.index') }}" class="flex flex-col sm:flex-row gap-2">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Filter pencarian..."
+                    class="border border-slate-300 rounded-xl px-4 py-2.5 w-full sm:w-80 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                <button class="px-5 py-2.5 bg-slate-800 text-white rounded-xl hover:bg-slate-700 transition">
+                    Cari
+                </button>
             </form>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full border border-slate-200">
-                <thead class="bg-slate-100">
-                    <tr>
-                        <th class="px-4 py-3 border text-left">No.</th>
-                        <th class="px-4 py-3 border text-left">No Peminjaman</th>
-                        <th class="px-4 py-3 border text-left">Peminjam</th>
-                        <th class="px-4 py-3 border text-left">Jurusan Tujuan</th>
-                        <th class="px-4 py-3 border text-left">Status</th>
-                        <th class="px-4 py-3 border text-left">Keterlambatan</th>
-                        <th class="px-4 py-3 border text-left">Tanggal Kembali</th>
-                        @if(auth()->user()->role !== 'peminjam')
-                            <th class="px-4 py-3 border text-left">Aksi</th>
-                        @endif
-                        <th class="px-4 py-3 border text-left">Foto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($riwayats as $index => $item)
-                                        <tr>
-                                            <td class="px-4 py-3 border">{{ $riwayats->firstItem() + $index }}</td>
-                                            <td class="px-4 py-3 border">{{ $item->no_peminjaman }}</td>
-                                            <td class="px-4 py-3 border">{{ $item->user->name ?? '-' }}</td>
-                                            <td class="px-4 py-3 border">{{ $item->jurusanTujuan->nama ?? '-' }}</td>
-                                            <td class="px-4 py-3 border">
-                                                <span class="px-2 py-1 text-xs rounded 
-                            {{ $item->status == 'menunggu' ? 'bg-yellow-100 text-yellow-700' : '' }}
-                            {{ $item->status == 'dipinjam' ? 'bg-blue-100 text-blue-700' : '' }}
-                            {{ $item->status == 'dikembalikan' ? 'bg-green-100 text-green-700' : '' }}
-                            {{ $item->status == 'ditolak' ? 'bg-red-100 text-red-700' : '' }}
-                        ">
-                                                    {{ ucfirst($item->status) }}
-                                                </span>
-                                            </td>
-                                            <td class="px-4 py-3 border">
-                                                {{ str_replace('_', ' ', ucfirst($item->status_keterlambatan ?? '-')) }}
-                                            </td>
-                                            <td class="px-4 py-3 border">{{ $item->tanggal_kembali ?? '-' }}</td>
-                                            @if(auth()->user()->role !== 'peminjam')
-                                                <td class="px-4 py-3 border">
-                                                    <form action="{{ route('riwayat.destroy', $item) }}" method="POST"
-                                                        onsubmit="return confirm('Yakin hapus riwayat ini?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="px-3 py-1 bg-red-600 text-white rounded">Hapus</button>
-                                                    </form>
-                                                </td>
-                                                <td class="px-4 py-3 border">
-                                                    @if($item->foto_pengembalian)
-                                                        <img src="{{ asset('storage/' . $item->foto_pengembalian) }}"
-                                                            class="w-16 h-16 object-cover rounded">
-                                                    @elseif($item->foto_peminjaman)
-                                                        <img src="{{ asset('storage/' . $item->foto_peminjaman) }}"
-                                                            class="w-16 h-16 object-cover rounded">
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                            @endif
-                                        </tr>
-                    @empty
+        <div class="overflow-hidden rounded-2xl border border-slate-200">
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-slate-100 text-slate-700">
                         <tr>
-                            <td colspan="{{ auth()->user()->role !== 'peminjam' ? 8 : 7 }}"
-                                class="px-4 py-4 border text-center text-slate-500">
-                                Belum ada data riwayat.
-                            </td>
+                            <th class="px-5 py-4 text-left font-semibold w-16">No.</th>
+                            <th class="px-5 py-4 text-left font-semibold">No Peminjaman</th>
+                            <th class="px-5 py-4 text-left font-semibold">Peminjam</th>
+                            <th class="px-5 py-4 text-left font-semibold">Jurusan Tujuan</th>
+                            <th class="px-5 py-4 text-left font-semibold">Status</th>
+                            <th class="px-5 py-4 text-left font-semibold">Keterlambatan</th>
+                            <th class="px-5 py-4 text-left font-semibold">Tanggal Kembali</th>
+                            <th class="px-5 py-4 text-left font-semibold">Petugas</th>
+                            <th class="px-5 py-4 text-left font-semibold">Foto</th>
+                            @if(auth()->user()->role !== 'peminjam')
+                                <th class="px-5 py-4 text-left font-semibold w-32">Aksi</th>
+                            @endif
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        @forelse($riwayats as $index => $item)
+                            @php
+                                $statusClass = match($item->status) {
+                                    'dikembalikan' => 'bg-green-100 text-green-700',
+                                    'ditolak' => 'bg-red-100 text-red-700',
+                                    default => 'bg-gray-100 text-gray-700',
+                                };
+
+                                $petugas = $item->petugasPengembalian->name 
+                                    ?? $item->petugasPeminjaman->name 
+                                    ?? '-';
+                            @endphp
+
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="px-5 py-4 text-slate-700">
+                                    {{ $riwayats->firstItem() + $index }}
+                                </td>
+                                <td class="px-5 py-4 font-medium text-slate-800">
+                                    {{ $item->no_peminjaman }}
+                                </td>
+                                <td class="px-5 py-4 text-slate-700">
+                                    {{ $item->user->name ?? '-' }}
+                                </td>
+                                <td class="px-5 py-4 text-slate-700">
+                                    {{ $item->jurusanTujuan->nama ?? '-' }}
+                                </td>
+                                <td class="px-5 py-4">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium {{ $statusClass }}">
+                                        {{ ucfirst($item->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-5 py-4 text-slate-700">
+                                    {{ str_replace('_', ' ', ucfirst($item->status_keterlambatan ?? '-')) }}
+                                </td>
+                                <td class="px-5 py-4 text-slate-700">
+                                    {{ $item->tanggal_kembali ?? '-' }}
+                                </td>
+                                <td class="px-5 py-4 text-slate-700">
+                                    {{ $petugas }}
+                                </td>
+                                <td class="px-5 py-4">
+                                    @if($item->foto_pengembalian)
+                                        <img src="{{ asset('storage/' . $item->foto_pengembalian) }}"
+                                            class="w-16 h-16 object-cover rounded-xl border border-slate-200">
+                                    @elseif($item->foto_peminjaman)
+                                        <img src="{{ asset('storage/' . $item->foto_peminjaman) }}"
+                                            class="w-16 h-16 object-cover rounded-xl border border-slate-200">
+                                    @else
+                                        <span class="text-slate-500">-</span>
+                                    @endif
+                                </td>
+                                @if(auth()->user()->role !== 'peminjam')
+                                    <td class="px-5 py-4">
+                                        <form action="{{ route('riwayat.destroy', $item) }}" method="POST"
+                                            onsubmit="return confirm('Yakin hapus riwayat ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </td>
+                                @endif
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="{{ auth()->user()->role !== 'peminjam' ? 10 : 9 }}"
+                                    class="px-5 py-10 text-center text-slate-500">
+                                    Belum ada data riwayat.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-5">
             {{ $riwayats->links() }}
         </div>
     </div>

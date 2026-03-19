@@ -13,7 +13,8 @@ class Barang extends Model
         'nama_barang',
         'stok',
         'kondisi',
-        'keterangan'
+        'keterangan',
+        'foto'
     ];
 
     public function jurusan()

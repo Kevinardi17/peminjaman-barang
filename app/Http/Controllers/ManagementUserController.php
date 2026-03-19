@@ -15,18 +15,19 @@ class ManagementUserController extends Controller
         $authUser = auth()->user();
 
         $query = User::with('jurusan')
-            ->where('role', 'peminjam');
+            ->whereIn('role', ['admin_jurusan', 'peminjam']);
 
         if ($authUser->role === 'admin_jurusan') {
-            $query->where('jurusan_id', $authUser->jurusan_id);
+            $query->where('role', 'peminjam')
+                ->where('jurusan_id', $authUser->jurusan_id);
         }
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('no_hp', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('no_hp', 'like', "%{$search}%");
             });
         }
 
@@ -50,28 +51,43 @@ class ManagementUserController extends Controller
     {
         $authUser = auth()->user();
 
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'no_hp' => ['required', 'string', 'max:20'],
-            'jenis_pengguna' => ['required', 'in:siswa,guru'],
-            'asal_kelas_jabatan' => ['required', 'string', 'max:255'],
-            'jurusan_id' => ['required', 'exists:jurusans,id'],
+            'role' => ['required', 'in:admin_jurusan,peminjam'],
+            'jurusan_id' => ['nullable', 'exists:jurusans,id'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ];
+
+        if ($request->role === 'peminjam') {
+            $rules['jenis_pengguna'] = ['required', 'in:siswa,guru'];
+            $rules['asal_kelas_jabatan'] = ['required', 'string', 'max:255'];
+        }
+
+        $request->validate($rules);
+
+        if ($authUser->role === 'admin_jurusan') {
+            $request->merge([
+                'role' => 'peminjam',
+                'jurusan_id' => $authUser->jurusan_id,
+            ]);
+        }
 
         if ($authUser->role === 'admin_jurusan' && (int) $request->jurusan_id !== (int) $authUser->jurusan_id) {
-            abort(403, 'Akses ditolak');
+            abort(403);
         }
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'no_hp' => $request->no_hp,
-            'role' => 'peminjam',
-            'jenis_pengguna' => $request->jenis_pengguna,
-            'asal_kelas_jabatan' => $request->asal_kelas_jabatan,
-            'jurusan_id' => $request->jurusan_id,
+            'role' => $request->role,
+            'jenis_pengguna' => $request->role === 'peminjam' ? $request->jenis_pengguna : null,
+            'asal_kelas_jabatan' => $request->role === 'peminjam'
+                ? $request->asal_kelas_jabatan
+                : 'Admin Jurusan',
+            'jurusan_id' => $request->role === 'admin_jurusan' ? $request->jurusan_id : $request->jurusan_id,
             'password' => Hash::make($request->password),
         ]);
 

@@ -8,7 +8,8 @@
 
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
             <form method="GET" action="{{ route('management-user.index') }}" class="flex gap-2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Filter pencarian..." class="border rounded-lg px-3 py-2 w-full md:w-72">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Filter pencarian..."
+                    class="border rounded-lg px-3 py-2 w-full md:w-72">
                 <button class="px-4 py-2 bg-slate-800 text-white rounded-lg">Cari</button>
             </form>
 
@@ -28,6 +29,7 @@
                         <th class="px-4 py-3 border text-left">Jenis</th>
                         <th class="px-4 py-3 border text-left">Asal/Kelas/Jabatan</th>
                         <th class="px-4 py-3 border text-left">Jurusan</th>
+                        <th class="px-4 py-3 border text-left">Role</th>
                         <th class="px-4 py-3 border text-left">Aksi</th>
                     </tr>
                 </thead>
@@ -38,13 +40,16 @@
                             <td class="px-4 py-3 border">{{ $user->name }}</td>
                             <td class="px-4 py-3 border">{{ $user->email }}</td>
                             <td class="px-4 py-3 border">{{ $user->no_hp }}</td>
-                            <td class="px-4 py-3 border">{{ ucfirst($user->jenis_pengguna) }}</td>
-                            <td class="px-4 py-3 border">{{ $user->asal_kelas_jabatan }}</td>
+                            <td class="px-4 py-3 border">{{ $user->jenis_pengguna ? ucfirst($user->jenis_pengguna) : '-' }}</td>
+                            <td class="px-4 py-3 border">{{ $user->asal_kelas_jabatan ?? '-' }}</td>
                             <td class="px-4 py-3 border">{{ $user->jurusan?->nama ?? '-' }}</td>
+                            <td class="px-4 py-3 border">{{ $user->role }}</td>
                             <td class="px-4 py-3 border">
                                 <div class="flex gap-2">
-                                    <a href="{{ route('management-user.edit', $user) }}" class="px-3 py-1 bg-yellow-500 text-white rounded">Edit</a>
-                                    <form action="{{ route('management-user.destroy', $user) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
+                                    <a href="{{ route('management-user.edit', $user) }}"
+                                        class="px-3 py-1 bg-yellow-500 text-white rounded">Edit</a>
+                                    <form action="{{ route('management-user.destroy', $user) }}" method="POST"
+                                        onsubmit="return confirm('Yakin hapus data ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="px-3 py-1 bg-red-600 text-white rounded">Hapus</button>
@@ -54,7 +59,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-4 py-4 border text-center text-slate-500">Data user belum ada.</td>
+                            <td colspan="9" class="px-4 py-4 border text-center text-slate-500">Data user belum ada.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -17,17 +17,17 @@ class PeminjamanController extends Controller
         $user = auth()->user();
 
         if ($user->role === 'peminjam') {
-            $peminjamans = Peminjaman::with(['jurusanTujuan', 'details.barang'])
+            $peminjamans = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang', 'petugasPeminjaman'])
                 ->where('user_id', $user->id)
                 ->latest()
                 ->paginate(10);
         } elseif ($user->role === 'admin_jurusan') {
-            $peminjamans = Peminjaman::with(['user', 'jurusanTujuan'])
+            $peminjamans = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang', 'petugasPeminjaman'])
                 ->where('jurusan_tujuan_id', $user->jurusan_id)
                 ->latest()
                 ->paginate(10);
         } else {
-            $peminjamans = Peminjaman::with(['user', 'jurusanTujuan'])
+            $peminjamans = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang', 'petugasPeminjaman'])
                 ->latest()
                 ->paginate(10);
         }
@@ -56,13 +56,66 @@ class PeminjamanController extends Controller
             'jurusan_tujuan_id' => ['required', 'exists:jurusans,id'],
             'tanggal_pinjam' => ['required', 'date'],
             'tanggal_rencana_kembali' => ['required', 'date', 'after_or_equal:tanggal_pinjam'],
-            'barang_id' => ['required', 'array', 'min:1'],
-            'barang_id.*' => ['required', 'exists:barangs,id'],
-            'jumlah' => ['required', 'array', 'min:1'],
-            'jumlah.*' => ['required', 'integer', 'min:1'],
+            'barang_id' => ['nullable', 'array'],
+            'barang_id.*' => ['exists:barangs,id'],
+            'jumlah' => ['nullable', 'array'],
         ]);
 
-        DB::transaction(function () use ($request) {
+        if (!$request->has('barang_id') || count($request->barang_id) === 0) {
+            return back()
+                ->withErrors([
+                    'barang_id' => 'Silakan checklist minimal 1 barang terlebih dahulu.'
+                ])
+                ->withInput();
+        }
+
+        $selectedBarangIds = $request->barang_id;
+        $jumlahInputs = $request->jumlah ?? [];
+        $detailItems = [];
+
+        foreach ($selectedBarangIds as $barangId) {
+            $barang = Barang::findOrFail($barangId);
+            $jumlah = isset($jumlahInputs[$barangId]) ? (int) $jumlahInputs[$barangId] : 0;
+
+            if ($jumlah < 1) {
+                return back()
+                    ->withErrors([
+                        'barang_id' => "Jumlah untuk barang {$barang->nama_barang} harus minimal 1."
+                    ])
+                    ->withInput();
+            }
+
+            if ((int) $barang->jurusan_id !== (int) $request->jurusan_tujuan_id) {
+                return back()
+                    ->withErrors([
+                        'barang_id' => "Barang {$barang->nama_barang} tidak sesuai dengan jurusan tujuan."
+                    ])
+                    ->withInput();
+            }
+
+            if ($jumlah > $barang->stok) {
+                return back()
+                    ->withErrors([
+                        'barang_id' => "Stok {$barang->nama_barang} tidak cukup. Stok tersedia: {$barang->stok}."
+                    ])
+                    ->withInput();
+            }
+
+            $detailItems[] = [
+                'barang_id' => $barang->id,
+                'jumlah' => $jumlah,
+            ];
+        }
+
+        if (count($detailItems) === 0) {
+            return back()
+                ->withErrors([
+                    'barang_id' => 'Pilih minimal 1 barang untuk diajukan.'
+                ])
+                ->withInput();
+        }
+
+        DB::transaction(function () use ($request, $detailItems) {
             $noPeminjaman = 'PJM-' . now()->format('Ymd') . '-' . str_pad((string) (Peminjaman::count() + 1), 4, '0', STR_PAD_LEFT);
 
             $peminjaman = Peminjaman::create([
@@ -75,34 +128,18 @@ class PeminjamanController extends Controller
                 'status_keterlambatan' => 'belum_kembali',
             ]);
 
-            foreach ($request->barang_id as $index => $barangId) {
-                if (!isset($request->jumlah[$index]))
-                    continue;
-
-                $barang = Barang::findOrFail($barangId);
-                $jumlah = (int) $request->jumlah[$index];
-
-                if ($jumlah <= 0)
-                    continue;
-
-                if ($barang->jurusan_id != $request->jurusan_tujuan_id) {
-                    abort(422, 'Barang harus sesuai jurusan tujuan.');
-                }
-
-                if ($jumlah > $barang->stok) {
-                    abort(422, "Stok {$barang->nama_barang} tidak cukup.");
-                }
-
+            foreach ($detailItems as $item) {
                 DetailPeminjaman::create([
                     'peminjaman_id' => $peminjaman->id,
-                    'barang_id' => $barangId,
-                    'jumlah' => $jumlah,
+                    'barang_id' => $item['barang_id'],
+                    'jumlah' => $item['jumlah'],
                 ]);
             }
         });
 
         return redirect()->route('peminjaman.index')->with('success', 'Pengajuan peminjaman berhasil dibuat.');
     }
+
     public function approve(Request $request, Peminjaman $peminjaman)
     {
         $user = auth()->user();
@@ -124,7 +161,7 @@ class PeminjamanController extends Controller
                 $barang = $detail->barang;
 
                 if ($detail->jumlah > $barang->stok) {
-                    abort(422, 'Stok tidak cukup.');
+                    return back()->with('error', "Stok {$barang->nama_barang} tidak cukup.");
                 }
 
                 $barang->decrement('stok', $detail->jumlah);
@@ -141,6 +178,7 @@ class PeminjamanController extends Controller
 
         return back()->with('success', 'Peminjaman disetujui.');
     }
+
     public function reject(Request $request, Peminjaman $peminjaman)
     {
         $request->validate([
@@ -164,7 +202,7 @@ class PeminjamanController extends Controller
     {
         $user = auth()->user();
 
-        $query = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang'])
+        $query = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang', 'petugasPeminjaman', 'petugasPengembalian'])
             ->where('status', 'dipinjam');
 
         if ($user->role === 'admin_jurusan') {
@@ -262,5 +300,4 @@ class PeminjamanController extends Controller
 
         return redirect()->route('riwayat.index')->with('success', 'Riwayat berhasil dihapus.');
     }
-
 }
