@@ -2,7 +2,7 @@
     <div class="w-full max-w-md">
         <div class="bg-white rounded-[22px] shadow-lg border border-slate-200 px-8 py-10">
             <div class="flex flex-col items-center text-center mb-8">
-                <img src="{{ asset('images/logo-smkn5.png') }}" alt="Logo SMKN 5" class="w-24 h-24 object-contain mb-4">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo SMKN 5" class="w-24 h-24 object-contain mb-4">
                 <h1 class="text-xl md:text-2xl font-semibold text-slate-900">
                     SMK N 5 BANDAR LAMPUNG
                 </h1>
