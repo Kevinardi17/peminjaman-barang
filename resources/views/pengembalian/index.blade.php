@@ -1,13 +1,13 @@
 <x-dashboard-layout title="Pengembalian">
     <div class="bg-white rounded-2xl shadow-sm border p-6">
         @if(session('success'))
-            <div class="mb-4 rounded-xl bg-green-100 text-green-700 px-4 py-3">
+            <div class="mb-4 rounded-xl bg-green-100 text-green-700 px-4 py-3 text-sm">
                 {{ session('success') }}
             </div>
         @endif
 
         @if(session('error'))
-            <div class="mb-4 rounded-xl bg-red-100 text-red-700 px-4 py-3">
+            <div class="mb-4 rounded-xl bg-red-100 text-red-700 px-4 py-3 text-sm">
                 {{ session('error') }}
             </div>
         @endif
@@ -17,15 +17,15 @@
                 <table class="min-w-full text-sm">
                     <thead class="bg-slate-100 text-slate-700">
                         <tr>
-                            <th class="px-5 py-4 text-left font-semibold w-16">No.</th>
-                            <th class="px-5 py-4 text-left font-semibold">No Peminjaman</th>
-                            <th class="px-5 py-4 text-left font-semibold">Peminjam</th>
-                            <th class="px-5 py-4 text-left font-semibold">Jumlah Barang</th>
-                            <th class="px-5 py-4 text-left font-semibold">Rencana Kembali</th>
-                            <th class="px-5 py-4 text-left font-semibold">Status Telat</th>
-                            <th class="px-5 py-4 text-left font-semibold">Petugas Peminjaman</th>
-                            <th class="px-5 py-4 text-left font-semibold">Petugas Pengembalian</th>
-                            <th class="px-5 py-4 text-left font-semibold w-64">Aksi</th>
+                            <th class="px-5 py-4 text-left font-semibold w-16 text-sm">No.</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">No Peminjaman</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Peminjam</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Jumlah Barang</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Rencana Kembali</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Status Telat</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Petugas Peminjaman</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Petugas Pengembalian</th>
+                            <th class="px-5 py-4 text-left font-semibold w-64 text-sm">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200">
@@ -35,22 +35,22 @@
                             @endphp
 
                             <tr class="hover:bg-slate-50 transition align-top">
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $peminjamans->firstItem() + $index }}
                                 </td>
-                                <td class="px-5 py-4 font-medium text-slate-800">
+                                <td class="px-5 py-4 font-medium text-slate-800 text-sm">
                                     {{ $item->no_peminjaman }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $item->user->name }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $jumlahBarang }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $item->tanggal_rencana_kembali }}
                                 </td>
-                                <td class="px-5 py-4">
+                                <td class="px-5 py-4 text-sm">
                                     @if(now()->toDateString() > $item->tanggal_rencana_kembali)
                                         <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-red-100 text-red-700">
                                             Terlambat
@@ -61,17 +61,17 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $item->petugasPeminjaman->name ?? '-' }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $item->petugasPengembalian->name ?? '-' }}
                                 </td>
-                                <td class="px-5 py-4">
+                                <td class="px-5 py-4 text-sm">
                                     <form action="{{ route('pengembalian.kembalikan', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-2 min-w-[220px]">
                                         @csrf
-                                        <input type="file" name="foto_pengembalian" required class="block w-full text-sm border border-slate-300 rounded-xl px-3 py-2">
-                                        <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                                        <input type="file" name="foto_pengembalian" required class="block w-full text-xs border border-slate-300 rounded-xl px-3 py-2">
+                                        <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-xs font-medium">
                                             Kembalikan
                                         </button>
                                     </form>
@@ -79,7 +79,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="px-5 py-10 text-center text-slate-500">
+                                <td colspan="9" class="px-5 py-10 text-center text-slate-500 text-sm">
                                     Belum ada data pengembalian.
                                 </td>
                             </tr>

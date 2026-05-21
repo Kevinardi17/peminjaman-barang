@@ -1,13 +1,13 @@
 <x-dashboard-layout title="Peminjaman">
     <div class="bg-white rounded-2xl shadow-sm border p-6">
         @if(session('success'))
-            <div class="mb-4 rounded-xl bg-green-100 text-green-700 px-4 py-3">
+            <div class="mb-4 rounded-xl bg-green-100 text-green-700 px-4 py-3 text-sm">
                 {{ session('success') }}
             </div>
         @endif
 
         @if(session('error'))
-            <div class="mb-4 rounded-xl bg-red-100 text-red-700 px-4 py-3">
+            <div class="mb-4 rounded-xl bg-red-100 text-red-700 px-4 py-3 text-sm">
                 {{ session('error') }}
             </div>
         @endif
@@ -19,16 +19,16 @@
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Filter pencarian..."
-                    class="border border-slate-300 rounded-xl px-4 py-2.5 w-full sm:w-80 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="border border-slate-300 rounded-xl px-4 py-2.5 w-full sm:w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 >
-                <button class="px-5 py-2.5 bg-slate-800 text-white rounded-xl hover:bg-slate-700 transition">
+                <button class="px-5 py-2.5 bg-slate-800 text-white rounded-xl hover:bg-slate-700 transition text-sm font-medium">
                     Cari
                 </button>
             </form>
 
             @if(auth()->user()->role === 'peminjam')
                 <a href="{{ route('peminjaman.create') }}"
-                    class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                    class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm font-medium">
                     Ajukan Peminjaman
                 </a>
             @endif
@@ -146,7 +146,7 @@
 
                                         @if($item->status === 'dipinjam')
                                             <a href="{{ route('peminjaman.print', $item) }}" target="_blank"
-                                                class="w-full text-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                                                class="w-full text-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm font-medium">
                                                 Print
                                             </a>
                                         @endif

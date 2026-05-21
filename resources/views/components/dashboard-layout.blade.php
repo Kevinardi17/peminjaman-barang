@@ -10,32 +10,32 @@
     <div class="min-h-screen md:flex">
         <aside class="hidden md:flex md:flex-col md:w-64 bg-slate-900 text-white fixed inset-y-0 left-0 z-40">
             <div class="px-6 py-5 border-b border-slate-800">
-                <h1 class="text-lg font-bold">Peminjaman Barang</h1>
-                <p class="text-sm text-slate-300 mt-1">{{ auth()->user()->name }}</p>
-                <p class="text-xs text-slate-500">{{ auth()->user()->role }}</p>
+                <h1 class="text-base font-bold">Peminjaman Barang</h1>
+                <p class="text-xs text-slate-300 mt-1">{{ auth()->user()->name }}</p>
+                <p class="text-[11px] text-slate-500">{{ auth()->user()->role }}</p>
             </div>
 
             <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2">
-                <a href="{{ route('dashboard') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Dashboard</a>
-                <a href="{{ route('jurusan.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Jurusan</a>
+                <a href="{{ route('dashboard') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Dashboard</a>
+                <a href="{{ route('jurusan.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Jurusan</a>
 
                 @if(auth()->user()->isSuperadmin() || auth()->user()->isAdminJurusan())
-                    <a href="{{ route('management-user.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Management User</a>
-                    <a href="{{ route('kategori.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Kategori</a>
-                    <a href="{{ route('barang.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Barang</a>
-                    <a href="{{ route('peminjaman.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Peminjaman</a>
-                    <a href="{{ route('pengembalian.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Pengembalian</a>
-                    <a href="{{ route('riwayat.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Riwayat</a>
+                    <a href="{{ route('management-user.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Management User</a>
+                    <a href="{{ route('kategori.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Kategori</a>
+                    <a href="{{ route('barang.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Barang</a>
+                    <a href="{{ route('peminjaman.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Peminjaman</a>
+                    <a href="{{ route('pengembalian.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Pengembalian</a>
+                    <a href="{{ route('riwayat.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Riwayat</a>
                 @endif
 
                 @if(auth()->user()->isPeminjam())
-                    <a href="{{ route('peminjaman.create') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Ajukan Peminjaman</a>
-                    <a href="{{ route('peminjaman.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Status Peminjaman</a>
-                    <a href="{{ route('riwayat.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Riwayat Peminjaman</a>
-                    <a href="{{ route('riwayat.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Riwayat Pengembalian</a>
+                    <a href="{{ route('peminjaman.create') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Ajukan Peminjaman</a>
+                    <a href="{{ route('peminjaman.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Status Peminjaman</a>
+                    <a href="{{ route('riwayat.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Riwayat Peminjaman</a>
+                    <a href="{{ route('riwayat.index') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Riwayat Pengembalian</a>
                 @endif
 
-                <a href="{{ route('profil.edit') }}" class="block px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Profil</a>
+                <a href="{{ route('profil.edit') }}" class="block text-sm px-4 py-2.5 rounded-xl hover:bg-slate-800 transition">Profil</a>
             </nav>
 
             <div class="p-4 border-t border-slate-800">
@@ -50,8 +50,8 @@
 
         <main class="flex-1 md:ml-64 p-6">
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-slate-800">{{ $title ?? 'Dashboard' }}</h2>
-                <p class="text-sm text-slate-500">Selamat datang, {{ auth()->user()->name }}</p>
+                <h2 class="text-3xl font-bold text-slate-800">{{ $title ?? 'Dashboard' }}</h2>
+                <p class="text-sm text-slate-600">Selamat datang, {{ auth()->user()->name }}</p>
             </div>
 
             {{ $slot }}

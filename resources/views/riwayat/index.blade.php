@@ -1,13 +1,13 @@
 <x-dashboard-layout title="Riwayat">
     <div class="bg-white rounded-2xl shadow-sm border p-6">
         @if(session('success'))
-            <div class="mb-4 rounded-xl bg-green-100 text-green-700 px-4 py-3">
+            <div class="mb-4 rounded-xl bg-green-100 text-green-700 px-4 py-3 text-sm">
                 {{ session('success') }}
             </div>
         @endif
 
         @if(session('error'))
-            <div class="mb-4 rounded-xl bg-red-100 text-red-700 px-4 py-3">
+            <div class="mb-4 rounded-xl bg-red-100 text-red-700 px-4 py-3 text-sm">
                 {{ session('error') }}
             </div>
         @endif
@@ -19,9 +19,9 @@
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Filter pencarian..."
-                    class="border border-slate-300 rounded-xl px-4 py-2.5 w-full sm:w-80 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="border border-slate-300 rounded-xl px-4 py-2.5 w-full sm:w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 >
-                <button class="px-5 py-2.5 bg-slate-800 text-white rounded-xl hover:bg-slate-700 transition">
+                <button class="px-5 py-2.5 bg-slate-800 text-white rounded-xl hover:bg-slate-700 transition text-sm">
                     Cari
                 </button>
             </form>
@@ -32,17 +32,17 @@
                 <table class="min-w-full text-sm">
                     <thead class="bg-slate-100 text-slate-700">
                         <tr>
-                            <th class="px-5 py-4 text-left font-semibold w-16">No.</th>
-                            <th class="px-5 py-4 text-left font-semibold">No Peminjaman</th>
-                            <th class="px-5 py-4 text-left font-semibold">Peminjam</th>
-                            <th class="px-5 py-4 text-left font-semibold">Jurusan Tujuan</th>
-                            <th class="px-5 py-4 text-left font-semibold">Status</th>
-                            <th class="px-5 py-4 text-left font-semibold">Keterlambatan</th>
-                            <th class="px-5 py-4 text-left font-semibold">Tanggal Kembali</th>
-                            <th class="px-5 py-4 text-left font-semibold">Petugas</th>
-                            <th class="px-5 py-4 text-left font-semibold">Foto</th>
+                            <th class="px-5 py-4 text-left font-semibold w-16 text-sm">No.</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">No Peminjaman</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Peminjam</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Jurusan Tujuan</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Status</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Keterlambatan</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Tanggal Kembali</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Petugas</th>
+                            <th class="px-5 py-4 text-left font-semibold text-sm">Foto</th>
                             @if(auth()->user()->role !== 'peminjam')
-                                <th class="px-5 py-4 text-left font-semibold w-32">Aksi</th>
+                                <th class="px-5 py-4 text-left font-semibold w-32 text-sm">Aksi</th>
                             @endif
                         </tr>
                     </thead>
@@ -61,33 +61,33 @@
                             @endphp
 
                             <tr class="hover:bg-slate-50 transition">
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $riwayats->firstItem() + $index }}
                                 </td>
-                                <td class="px-5 py-4 font-medium text-slate-800">
+                                <td class="px-5 py-4 font-medium text-slate-800 text-sm">
                                     {{ $item->no_peminjaman }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $item->user->name ?? '-' }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $item->jurusanTujuan->nama ?? '-' }}
                                 </td>
-                                <td class="px-5 py-4">
+                                <td class="px-5 py-4 text-sm">
                                     <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium {{ $statusClass }}">
                                         {{ ucfirst($item->status) }}
                                     </span>
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ str_replace('_', ' ', ucfirst($item->status_keterlambatan ?? '-')) }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $item->tanggal_kembali ?? '-' }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-700">
+                                <td class="px-5 py-4 text-slate-700 text-sm">
                                     {{ $petugas }}
                                 </td>
-                                <td class="px-5 py-4">
+                                <td class="px-5 py-4 text-sm">
                                     @if($item->foto_pengembalian)
                                         <img src="{{ asset('storage/' . $item->foto_pengembalian) }}"
                                             class="w-16 h-16 object-cover rounded-xl border border-slate-200">
@@ -104,7 +104,7 @@
                                             onsubmit="return confirm('Yakin hapus riwayat ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition">
+                                            <button class="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition text-xs font-medium">
                                                 Hapus
                                             </button>
                                         </form>
@@ -114,7 +114,7 @@
                         @empty
                             <tr>
                                 <td colspan="{{ auth()->user()->role !== 'peminjam' ? 10 : 9 }}"
-                                    class="px-5 py-10 text-center text-slate-500">
+                                    class="px-5 py-10 text-center text-slate-500 text-sm">
                                     Belum ada data riwayat.
                                 </td>
                             </tr>

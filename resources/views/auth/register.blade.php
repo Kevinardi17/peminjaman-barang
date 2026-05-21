@@ -3,10 +3,10 @@
         <div class="bg-white rounded-[22px] shadow-lg border border-slate-200 px-8 py-10">
             <div class="flex flex-col items-center text-center mb-8">
                 <img src="{{ asset('images/logo-smkn5.png') }}" alt="Logo SMKN 5" class="w-24 h-24 object-contain mb-4">
-                <h1 class="text-xl md:text-2xl font-semibold text-slate-900">
+                <h1 class="text-2xl font-bold text-slate-900">
                     SMK N 5 BANDAR LAMPUNG
                 </h1>
-                <p class="text-slate-600 mt-2">Sistem Peminjaman Barang</p>
+                <p class="text-sm text-slate-600 mt-2">Sistem Peminjaman Barang</p>
             </div>
 
             <form method="POST" action="{{ route('register') }}" class="space-y-5">
@@ -141,14 +141,14 @@
 
                 <button
                     type="submit"
-                    class="w-full rounded-xl bg-blue-600 py-3.5 text-lg font-bold text-white shadow hover:bg-blue-700 transition"
+                    class="w-full rounded-xl bg-blue-600 py-3 text-base font-semibold text-white shadow hover:bg-blue-700 transition"
                 >
                     Register
                 </button>
 
                 <a
                     href="{{ route('login') }}"
-                    class="flex w-full items-center justify-center rounded-xl bg-slate-100 py-3.5 text-lg font-semibold text-slate-800 border border-slate-200 hover:bg-slate-200 transition"
+                    class="flex w-full items-center justify-center rounded-xl bg-slate-100 py-3 text-base font-semibold text-slate-800 border border-slate-200 hover:bg-slate-200 transition"
                 >
                     Sudah punya akun? Login
                 </a>
