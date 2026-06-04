@@ -7,3 +7,59 @@
 body {
     font-family: 'Inter', sans-serif;
 }
+
+/* Global font size adjustments */
+
+/* Headings */
+h1 {
+    font-size: 1.875rem; /* 30px */
+    font-weight: 700;
+}
+h2 {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 600;
+}
+h3 {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 600;
+}
+
+/* Paragraphs */
+p {
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.5;
+    color: #4B5563; /* Neutral gray */
+}
+
+/* Labels */
+label {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    color: #374151; /* Darker gray */
+}
+
+/* Buttons */
+button {
+    font-size: 0.9375rem; /* 15px */
+    font-weight: 600;
+}
+
+/* Links */
+a {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    color: #2563EB; /* Blue */
+    text-decoration: none;
+}
+
+/* Table text */
+table {
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.5;
+}
+
+/* Error messages */
+.text-red-600 {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+}

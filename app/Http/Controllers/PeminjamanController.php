@@ -181,6 +181,12 @@ class PeminjamanController extends Controller
 
     public function reject(Request $request, Peminjaman $peminjaman)
     {
+        $user = auth()->user();
+
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
         $request->validate([
             'alasan_penolakan' => ['required', 'string']
         ]);
@@ -195,6 +201,12 @@ class PeminjamanController extends Controller
 
     public function print(Peminjaman $peminjaman)
     {
+        $user = auth()->user();
+
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
         return view('peminjaman.print', compact('peminjaman'));
     }
 
