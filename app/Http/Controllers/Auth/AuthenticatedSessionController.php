@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/dashboard');
+        return redirect('/dashboard')->with('login_success', 'Selamat datang, ' . auth()->user()->name . '!');
     }
 
     /**

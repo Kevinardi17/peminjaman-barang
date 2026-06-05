@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jurusan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
@@ -31,6 +32,8 @@ class ProfileController extends Controller
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'no_hp' => ['nullable', 'string', 'max:20'],
             'password' => ['nullable', 'confirmed', 'min:8'],
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'hapus_foto' => ['nullable', 'boolean'],
         ];
 
         if ($user->role !== 'superadmin') {
@@ -56,6 +59,20 @@ class ProfileController extends Controller
         } else {
             unset($validated['password']);
         }
+
+        if ($request->hasFile('foto')) {
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            $validated['profile_photo_path'] = $request->file('foto')->store('profile-photos', 'public');
+        } elseif ($request->boolean('hapus_foto')) {
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            $validated['profile_photo_path'] = null;
+        }
+
+        unset($validated['foto'], $validated['hapus_foto']);
 
         $user->update($validated);
 

@@ -56,8 +56,9 @@ class BarangController extends Controller
             'kode_barang' => ['required', 'string', 'max:255', 'unique:barangs,kode_barang'],
             'nama_barang' => ['required', 'string', 'max:255'],
             'stok' => ['required', 'integer', 'min:0'],
-            'kondisi' => ['required', 'string', 'max:255'],
+            'kondisi' => ['nullable', 'string', 'max:255'],
             'keterangan' => ['nullable', 'string'],
+            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ]);
 
         if ($user->role === 'admin_jurusan' && (int) $request->jurusan_id !== (int) $user->jurusan_id) {
@@ -72,7 +73,7 @@ class BarangController extends Controller
             ])->withInput();
         }
 
-        Barang::create($request->only([
+        $data = $request->only([
             'jurusan_id',
             'kategori_id',
             'kode_barang',
@@ -80,7 +81,13 @@ class BarangController extends Controller
             'stok',
             'kondisi',
             'keterangan',
-        ]));
+        ]);
+
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('barang', 'public');
+        }
+
+        Barang::create($data);
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan.');
     }
@@ -118,8 +125,9 @@ class BarangController extends Controller
             'kode_barang' => ['required', 'string', 'max:255', 'unique:barangs,kode_barang,' . $barang->id],
             'nama_barang' => ['required', 'string', 'max:255'],
             'stok' => ['required', 'integer', 'min:0'],
-            'kondisi' => ['required', 'string', 'max:255'],
+            'kondisi' => ['nullable', 'string', 'max:255'],
             'keterangan' => ['nullable', 'string'],
+            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ]);
 
         if ($user->role === 'admin_jurusan' && (int) $request->jurusan_id !== (int) $user->jurusan_id) {
@@ -134,7 +142,7 @@ class BarangController extends Controller
             ])->withInput();
         }
 
-        $barang->update($request->only([
+        $data = $request->only([
             'jurusan_id',
             'kategori_id',
             'kode_barang',
@@ -142,7 +150,13 @@ class BarangController extends Controller
             'stok',
             'kondisi',
             'keterangan',
-        ]));
+        ]);
+
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('barang', 'public');
+        }
+
+        $barang->update($data);
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui.');
     }
@@ -158,5 +172,40 @@ class BarangController extends Controller
         $barang->delete();
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus.');
+    }
+
+    public function show(Barang $barang)
+    {
+        $user = auth()->user();
+        if ($user->role === 'admin_jurusan' && $barang->jurusan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
+        // Calculate available stock
+        $dipinjam = \App\Models\DetailPeminjaman::where('barang_id', $barang->id)
+            ->whereHas('peminjaman', function($q) {
+                $q->where('status', 'dipinjam');
+            })->sum('jumlah');
+
+        $tersedia = $barang->stok - $dipinjam;
+
+        return view('barang.show', compact('barang', 'tersedia', 'dipinjam'));
+    }
+
+    public function history(Barang $barang)
+    {
+        $user = auth()->user();
+        if ($user->role === 'admin_jurusan' && $barang->jurusan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
+        $riwayats = \App\Models\Peminjaman::with(['user', 'jurusanTujuan'])
+            ->whereHas('details', function($q) use ($barang) {
+                $q->where('barang_id', $barang->id);
+            })
+            ->latest()
+            ->paginate(10);
+
+        return view('barang.history', compact('barang', 'riwayats'));
     }
 }

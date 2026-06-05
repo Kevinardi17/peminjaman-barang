@@ -1,6 +1,6 @@
 <x-dashboard-layout title="Tambah Barang">
     <div class="bg-white rounded-2xl shadow-sm border p-5 max-w-2xl">
-        <form action="{{ route('barang.store') }}" method="POST" class="space-y-4">
+        <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
 
             <div>
@@ -57,6 +57,12 @@
                 <label class="block mb-1 font-medium">Keterangan</label>
                 <textarea name="keterangan" rows="4" class="w-full border rounded-lg px-3 py-2">{{ old('keterangan') }}</textarea>
                 @error('keterangan') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
+
+            <div>
+                <label class="block mb-1 font-medium">Foto Barang (Opsional)</label>
+                <input type="file" name="foto" class="w-full border rounded-lg px-3 py-2 text-sm" accept="image/*">
+                @error('foto') <small class="text-red-600">{{ $message }}</small> @enderror
             </div>
 
             <div class="flex gap-2">

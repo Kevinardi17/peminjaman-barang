@@ -99,7 +99,11 @@ class ManagementUserController extends Controller
         $authUser = auth()->user();
         $user = $management_user;
 
-        if ($user->role !== 'peminjam') {
+        if ($user->role === 'superadmin') {
+            abort(403, 'Akses ditolak');
+        }
+
+        if ($authUser->role === 'admin_jurusan' && $user->role !== 'peminjam') {
             abort(403, 'Akses ditolak');
         }
 
@@ -119,7 +123,11 @@ class ManagementUserController extends Controller
         $authUser = auth()->user();
         $user = $management_user;
 
-        if ($user->role !== 'peminjam') {
+        if ($user->role === 'superadmin') {
+            abort(403, 'Akses ditolak');
+        }
+
+        if ($authUser->role === 'admin_jurusan' && $user->role !== 'peminjam') {
             abort(403, 'Akses ditolak');
         }
 
@@ -131,8 +139,9 @@ class ManagementUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'no_hp' => ['required', 'string', 'max:20'],
-            'jenis_pengguna' => ['required', 'in:siswa,guru'],
-            'asal_kelas_jabatan' => ['required', 'string', 'max:255'],
+            'role' => ['nullable', 'in:peminjam,admin_jurusan'],
+            'jenis_pengguna' => [Rule::requiredIf($request->role === 'peminjam' || (!isset($request->role) && $user->role === 'peminjam')), 'nullable', 'in:siswa,guru'],
+            'asal_kelas_jabatan' => [Rule::requiredIf($request->role === 'peminjam' || (!isset($request->role) && $user->role === 'peminjam')), 'nullable', 'string', 'max:255'],
             'jurusan_id' => ['required', 'exists:jurusans,id'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
@@ -145,10 +154,17 @@ class ManagementUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'no_hp' => $request->no_hp,
-            'jenis_pengguna' => $request->jenis_pengguna,
-            'asal_kelas_jabatan' => $request->asal_kelas_jabatan,
             'jurusan_id' => $request->jurusan_id,
         ];
+
+        if ($authUser->role === 'superadmin' && $request->filled('role')) {
+            $data['role'] = $request->role;
+        }
+        
+        $currentRole = $data['role'] ?? $user->role;
+        
+        $data['jenis_pengguna'] = $currentRole === 'peminjam' ? $request->jenis_pengguna : null;
+        $data['asal_kelas_jabatan'] = $currentRole === 'peminjam' ? $request->asal_kelas_jabatan : 'Admin Jurusan';
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
@@ -164,7 +180,11 @@ class ManagementUserController extends Controller
         $authUser = auth()->user();
         $user = $management_user;
 
-        if ($user->role !== 'peminjam') {
+        if ($user->role === 'superadmin') {
+            abort(403, 'Akses ditolak');
+        }
+
+        if ($authUser->role === 'admin_jurusan' && $user->role !== 'peminjam') {
             abort(403, 'Akses ditolak');
         }
 
@@ -175,5 +195,17 @@ class ManagementUserController extends Controller
         $user->delete();
 
         return redirect()->route('management-user.index')->with('success', 'User berhasil dihapus.');
+    }
+
+    public function show(User $management_user)
+    {
+        $authUser = auth()->user();
+        $user = $management_user;
+
+        if ($authUser->role === 'admin_jurusan' && $user->jurusan_id !== $authUser->jurusan_id) {
+            abort(403, 'Akses ditolak');
+        }
+
+        return view('management-user.show', compact('user'));
     }
 }

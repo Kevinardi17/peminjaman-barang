@@ -41,9 +41,7 @@
                             <th class="px-5 py-4 text-left font-semibold">Tanggal Kembali</th>
                             <th class="px-5 py-4 text-left font-semibold">Petugas</th>
                             <th class="px-5 py-4 text-left font-semibold">Foto</th>
-                            @if(auth()->user()->role !== 'peminjam')
-                                <th class="px-5 py-4 text-left font-semibold w-32">Aksi</th>
-                            @endif
+                            <th class="px-5 py-4 text-left font-semibold w-32">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200">
@@ -98,23 +96,30 @@
                                         <span class="text-slate-500">-</span>
                                     @endif
                                 </td>
-                                @if(auth()->user()->role !== 'peminjam')
-                                    <td class="px-5 py-4">
-                                        <form action="{{ route('riwayat.destroy', $item) }}" method="POST"
-                                            onsubmit="return confirm('Yakin hapus riwayat ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </td>
-                                @endif
+                                <td class="px-5 py-4">
+                                    <div class="flex flex-col gap-2">
+                                        @if($item->status === 'dikembalikan')
+                                            <a href="{{ route('pengembalian.print', $item) }}" target="_blank"
+                                                class="w-full px-4 py-2 bg-blue-600 text-white text-center rounded-xl hover:bg-blue-700 transition">
+                                                Cetak Bukti
+                                            </a>
+                                        @endif
+                                        @if(auth()->user()->role === 'superadmin')
+                                            <form action="{{ route('riwayat.destroy', $item) }}" method="POST"
+                                                onsubmit="return confirm('Yakin hapus riwayat ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="w-full px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ auth()->user()->role !== 'peminjam' ? 10 : 9 }}"
-                                    class="px-5 py-10 text-center text-slate-500">
+                                <td colspan="10" class="px-5 py-10 text-center text-slate-500">
                                     Belum ada data riwayat.
                                 </td>
                             </tr>

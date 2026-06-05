@@ -31,7 +31,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'no_hp' => ['required', 'string', 'max:20'],
+            'no_hp' => ['required', 'string', 'min:10', 'regex:/^(08|62)/', 'max:20'],
             'jenis_pengguna' => ['required', 'in:siswa,guru'],
             'asal_kelas_jabatan' => ['required', 'string', 'max:255'],
             'jurusan_id' => ['required', 'exists:jurusans,id'],

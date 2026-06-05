@@ -19,15 +19,18 @@ class PeminjamanController extends Controller
         if ($user->role === 'peminjam') {
             $peminjamans = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang', 'petugasPeminjaman'])
                 ->where('user_id', $user->id)
+                ->where('status', '!=', 'dikembalikan')
                 ->latest()
                 ->paginate(10);
         } elseif ($user->role === 'admin_jurusan') {
             $peminjamans = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang', 'petugasPeminjaman'])
                 ->where('jurusan_tujuan_id', $user->jurusan_id)
+                ->where('status', '!=', 'dikembalikan')
                 ->latest()
                 ->paginate(10);
         } else {
             $peminjamans = Peminjaman::with(['user', 'jurusanTujuan', 'details.barang', 'petugasPeminjaman'])
+                ->where('status', '!=', 'dikembalikan')
                 ->latest()
                 ->paginate(10);
         }
@@ -263,15 +266,14 @@ class PeminjamanController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Barang berhasil dikembalikan.');
+        return redirect()->route('pengembalian.index')->with('success', 'Barang berhasil dikembalikan.');
     }
 
     public function riwayat(Request $request)
     {
         $user = auth()->user();
 
-        $query = Peminjaman::with(['user', 'jurusanTujuan'])
-            ->whereIn('status', ['dikembalikan', 'ditolak']);
+        $query = Peminjaman::with(['user', 'jurusanTujuan']);
 
         if ($user->role === 'peminjam') {
             $query->where('user_id', $user->id);
@@ -311,5 +313,52 @@ class PeminjamanController extends Controller
         $peminjaman->delete();
 
         return redirect()->route('riwayat.index')->with('success', 'Riwayat berhasil dihapus.');
+    }
+
+    public function show(Peminjaman $peminjaman)
+    {
+        $user = auth()->user();
+
+        if ($user->role === 'peminjam' && $peminjaman->user_id !== $user->id) {
+            abort(403);
+        }
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
+        return view('peminjaman.show', compact('peminjaman'));
+    }
+
+    public function showPengembalian(Peminjaman $peminjaman)
+    {
+        $user = auth()->user();
+
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
+        if ($peminjaman->status !== 'dipinjam') {
+            abort(404);
+        }
+
+        return view('pengembalian.show', compact('peminjaman'));
+    }
+
+    public function printPengembalian(Peminjaman $peminjaman)
+    {
+        $user = auth()->user();
+
+        if ($user->role === 'peminjam' && $peminjaman->user_id !== $user->id) {
+            abort(403);
+        }
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+            abort(403);
+        }
+
+        if ($peminjaman->status !== 'dikembalikan') {
+            abort(404);
+        }
+
+        return view('pengembalian.print', compact('peminjaman'));
     }
 }

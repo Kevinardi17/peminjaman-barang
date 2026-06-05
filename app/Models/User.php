@@ -19,6 +19,7 @@ class User extends Authenticatable
         'jenis_pengguna',
         'asal_kelas_jabatan',
         'jurusan_id',
+        'profile_photo_path',
     ];
 
     protected $hidden = [

@@ -24,10 +24,7 @@
                     <tr>
                         <th class="px-4 py-3 border text-left">No.</th>
                         <th class="px-4 py-3 border text-left">Nama</th>
-                        <th class="px-4 py-3 border text-left">Email</th>
                         <th class="px-4 py-3 border text-left">No HP</th>
-                        <th class="px-4 py-3 border text-left">Jenis</th>
-                        <th class="px-4 py-3 border text-left">Asal/Kelas/Jabatan</th>
                         <th class="px-4 py-3 border text-left">Jurusan</th>
                         <th class="px-4 py-3 border text-left">Role</th>
                         <th class="px-4 py-3 border text-left">Aksi</th>
@@ -37,29 +34,31 @@
                     @forelse($users as $index => $user)
                         <tr>
                             <td class="px-4 py-3 border">{{ $users->firstItem() + $index }}</td>
-                            <td class="px-4 py-3 border">{{ $user->name }}</td>
-                            <td class="px-4 py-3 border">{{ $user->email }}</td>
+                            <td class="px-4 py-3 border font-medium">{{ $user->name }}</td>
                             <td class="px-4 py-3 border">{{ $user->no_hp }}</td>
-                            <td class="px-4 py-3 border">{{ $user->jenis_pengguna ? ucfirst($user->jenis_pengguna) : '-' }}</td>
-                            <td class="px-4 py-3 border">{{ $user->asal_kelas_jabatan ?? '-' }}</td>
                             <td class="px-4 py-3 border">{{ $user->jurusan?->nama ?? '-' }}</td>
-                            <td class="px-4 py-3 border">{{ $user->role }}</td>
+                            <td class="px-4 py-3 border">
+                                @if($user->role === 'admin_jurusan')
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium">Admin Jurusan</span>
+                                @else
+                                    <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium">Peminjam</span>
+                                @endif
+                            </td>
                             <td class="px-4 py-3 border">
                                 <div class="flex gap-2">
-                                    <a href="{{ route('management-user.edit', $user) }}"
-                                        class="px-3 py-1 bg-yellow-500 text-white rounded">Edit</a>
-                                    <form action="{{ route('management-user.destroy', $user) }}" method="POST"
-                                        onsubmit="return confirm('Yakin hapus data ini?')">
+                                    <a href="{{ route('management-user.show', $user) }}" class="px-3 py-1 bg-slate-800 text-white rounded text-sm hover:bg-slate-700">Detail</a>
+                                    <a href="{{ route('management-user.edit', $user) }}" class="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Edit</a>
+                                    <form action="{{ route('management-user.destroy', $user) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="px-3 py-1 bg-red-600 text-white rounded">Hapus</button>
+                                        <button class="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">Hapus</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-4 py-4 border text-center text-slate-500">Data user belum ada.</td>
+                            <td colspan="6" class="px-4 py-4 border text-center text-slate-500">Data user belum ada.</td>
                         </tr>
                     @endforelse
                 </tbody>
