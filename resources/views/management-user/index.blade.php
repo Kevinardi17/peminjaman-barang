@@ -30,7 +30,7 @@
                         <th class="px-4 py-3 border text-left">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="realtime-tbody">
                     @forelse($users as $index => $user)
                         <tr>
                             <td class="px-4 py-3 border">{{ $users->firstItem() + $index }}</td>
@@ -47,7 +47,9 @@
                             <td class="px-4 py-3 border">
                                 <div class="flex gap-2">
                                     <a href="{{ route('management-user.show', $user) }}" class="px-3 py-1 bg-slate-800 text-white rounded text-sm hover:bg-slate-700">Detail</a>
-                                    <a href="{{ route('management-user.edit', $user) }}" class="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Edit</a>
+                                    @if(auth()->user()->role === 'superadmin')
+                                        <a href="{{ route('management-user.edit', $user) }}" class="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Edit</a>
+                                    @endif
                                     <form action="{{ route('management-user.destroy', $user) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
                                         @csrf
                                         @method('DELETE')
@@ -65,7 +67,7 @@
             </table>
         </div>
 
-        <div class="mt-4">
+        <div id="realtime-pagination" class="mt-4">
             {{ $users->links() }}
         </div>
     </div>

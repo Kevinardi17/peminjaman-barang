@@ -34,7 +34,7 @@
                         <th class="px-4 py-3 border text-left">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="realtime-tbody">
                     @forelse($kategoris as $index => $kategori)
                         <tr>
                             <td class="px-4 py-3 border">
@@ -69,7 +69,7 @@
             </table>
         </div>
 
-        <div class="mt-4">
+        <div id="realtime-pagination" class="mt-4">
             {{ $kategoris->links() }}
         </div>
     </div>

@@ -3,12 +3,18 @@
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-bold text-slate-800">Detail Barang</h2>
             <div class="flex gap-2">
-                <a href="{{ route('barang.history', $barang) }}" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-xl hover:bg-blue-200 transition text-sm font-medium">
-                    Lihat Riwayat
-                </a>
-                <a href="{{ route('barang.index') }}" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition text-sm font-medium">
-                    Kembali
-                </a>
+                @if(auth()->user()->role !== 'peminjam')
+                    <a href="{{ route('barang.history', $barang) }}" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-xl hover:bg-blue-200 transition text-sm font-medium">
+                        Lihat Riwayat
+                    </a>
+                    <a href="{{ route('barang.index') }}" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition text-sm font-medium">
+                        Kembali
+                    </a>
+                @else
+                    <a href="{{ route('peminjaman.create') }}" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition text-sm font-medium">
+                        Kembali
+                    </a>
+                @endif
             </div>
         </div>
 
@@ -53,8 +59,16 @@
                         <p class="font-medium text-orange-600">{{ $dipinjam }}</p>
                     </div>
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Kondisi</h3>
-                        <p class="font-medium text-slate-800">{{ $barang->kondisi ?? '-' }}</p>
+                        <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Kondisi Barang</h3>
+                        <div class="flex flex-wrap gap-2">
+                            @if($barang->kondisi)
+                                @foreach(explode(',', $barang->kondisi) as $cond)
+                                    <span class="px-2 py-1 bg-white border border-slate-200 text-slate-700 rounded-md text-xs font-semibold">{{ trim($cond) }}</span>
+                                @endforeach
+                            @else
+                                <span class="text-slate-400">-</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
 

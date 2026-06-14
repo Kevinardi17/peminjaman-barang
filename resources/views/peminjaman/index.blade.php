@@ -47,7 +47,7 @@
                             <th class="px-5 py-4 text-left font-semibold w-32">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200">
+                    <tbody id="realtime-tbody" class="divide-y divide-slate-200">
                         @forelse($peminjamans as $index => $item)
                             @php
                                 $statusClass = match($item->status) {
@@ -112,7 +112,7 @@
             </div>
         </div>
 
-        <div class="mt-5">
+        <div id="realtime-pagination" class="mt-5">
             {{ $peminjamans->links() }}
         </div>
     </div>

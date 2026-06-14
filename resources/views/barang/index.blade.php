@@ -30,7 +30,7 @@
                         <th class="px-4 py-3 border text-left">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="realtime-tbody">
                     @forelse($barangs as $index => $barang)
                         @php
                             $dipinjam = \App\Models\DetailPeminjaman::where('barang_id', $barang->id)
@@ -77,7 +77,7 @@
             </table>
         </div>
 
-        <div class="mt-4">
+        <div id="realtime-pagination" class="mt-4">
             {{ $barangs->links() }}
         </div>
     </div>

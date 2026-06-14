@@ -18,11 +18,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/jurusan', [JurusanController::class, 'index'])->name('jurusan.index');
-});
-
 Route::middleware(['role:superadmin'])->group(function () {
+    Route::get('/jurusan', [JurusanController::class, 'index'])->name('jurusan.index');
     Route::get('/jurusan/create', [JurusanController::class, 'create'])->name('jurusan.create');
     Route::post('/jurusan', [JurusanController::class, 'store'])->name('jurusan.store');
     Route::get('/jurusan/{jurusan}/edit', [JurusanController::class, 'edit'])->name('jurusan.edit');
@@ -68,7 +65,11 @@ Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
 
 Route::middleware(['role:superadmin,admin_jurusan'])->group(function () {
     Route::get('/barang/{barang}/history', [BarangController::class, 'history'])->name('barang.history');
-    Route::resource('barang', BarangController::class);
+    Route::resource('barang', BarangController::class)->except(['show']);
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/barang/{barang}', [BarangController::class, 'show'])->name('barang.show');
 });
 
 
@@ -83,6 +84,8 @@ Route::middleware(['auth'])->group(function () {
                 'totalBarang' => Barang::count(),
                 'totalMenunggu' => Peminjaman::where('status', 'menunggu')->count(),
                 'totalDipinjam' => Peminjaman::where('status', 'dipinjam')->count(),
+                'totalDikembalikan' => Peminjaman::where('status', 'dikembalikan')->count(),
+                'totalDitolak' => Peminjaman::where('status', 'ditolak')->count(),
                 'totalTelat' => Peminjaman::where('status', 'dipinjam')
                     ->whereDate('tanggal_rencana_kembali', '<', now())
                     ->count(),
@@ -97,6 +100,12 @@ Route::middleware(['auth'])->group(function () {
                     ->count(),
                 'totalDipinjam' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
                     ->where('status', 'dipinjam')
+                    ->count(),
+                'totalDikembalikan' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
+                    ->where('status', 'dikembalikan')
+                    ->count(),
+                'totalDitolak' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
+                    ->where('status', 'ditolak')
                     ->count(),
                 'totalTelat' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
                     ->where('status', 'dipinjam')
@@ -113,11 +122,76 @@ Route::middleware(['auth'])->group(function () {
             'totalDipinjam' => Peminjaman::where('user_id', $user->id)
                 ->where('status', 'dipinjam')
                 ->count(),
+            'totalDikembalikan' => Peminjaman::where('user_id', $user->id)
+                ->where('status', 'dikembalikan')
+                ->count(),
+            'totalDitolak' => Peminjaman::where('user_id', $user->id)
+                ->where('status', 'ditolak')
+                ->count(),
             'totalRiwayat' => Peminjaman::where('user_id', $user->id)
                 ->whereIn('status', ['dikembalikan', 'ditolak'])
                 ->count(),
         ]);
     })->name('dashboard');
+
+    Route::get('/dashboard/stats', function () {
+        $user = auth()->user();
+
+        if ($user->role === 'superadmin') {
+            return response()->json([
+                'totalUser' => User::count(),
+                'totalBarang' => Barang::count(),
+                'totalMenunggu' => Peminjaman::where('status', 'menunggu')->count(),
+                'totalDipinjam' => Peminjaman::where('status', 'dipinjam')->count(),
+                'totalDikembalikan' => Peminjaman::where('status', 'dikembalikan')->count(),
+                'totalDitolak' => Peminjaman::where('status', 'ditolak')->count(),
+                'totalTelat' => Peminjaman::where('status', 'dipinjam')
+                    ->whereDate('tanggal_rencana_kembali', '<', now())
+                    ->count(),
+            ]);
+        }
+
+        if ($user->role === 'admin_jurusan') {
+            return response()->json([
+                'totalBarang' => Barang::where('jurusan_id', $user->jurusan_id)->count(),
+                'totalMenunggu' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
+                    ->where('status', 'menunggu')
+                    ->count(),
+                'totalDipinjam' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
+                    ->where('status', 'dipinjam')
+                    ->count(),
+                'totalDikembalikan' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
+                    ->where('status', 'dikembalikan')
+                    ->count(),
+                'totalDitolak' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
+                    ->where('status', 'ditolak')
+                    ->count(),
+                'totalTelat' => Peminjaman::where('jurusan_tujuan_id', $user->jurusan_id)
+                    ->where('status', 'dipinjam')
+                    ->whereDate('tanggal_rencana_kembali', '<', now())
+                    ->count(),
+            ]);
+        }
+
+        return response()->json([
+            'totalPengajuan' => Peminjaman::where('user_id', $user->id)->count(),
+            'totalMenunggu' => Peminjaman::where('user_id', $user->id)
+                ->where('status', 'menunggu')
+                ->count(),
+            'totalDipinjam' => Peminjaman::where('user_id', $user->id)
+                ->where('status', 'dipinjam')
+                ->count(),
+            'totalDikembalikan' => Peminjaman::where('user_id', $user->id)
+                ->where('status', 'dikembalikan')
+                ->count(),
+            'totalDitolak' => Peminjaman::where('user_id', $user->id)
+                ->where('status', 'ditolak')
+                ->count(),
+            'totalRiwayat' => Peminjaman::where('user_id', $user->id)
+                ->whereIn('status', ['dikembalikan', 'ditolak'])
+                ->count(),
+        ]);
+    })->name('dashboard.stats');
 });
 
 require __DIR__ . '/auth.php';

@@ -41,7 +41,7 @@
                             @endif
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200">
+                    <tbody id="realtime-tbody" class="divide-y divide-slate-200">
                         @forelse($jurusans as $index => $jurusan)
                             <tr class="hover:bg-slate-50 transition">
                                 <td class="px-5 py-4 text-slate-700">
@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <div class="mt-5">
+        <div id="realtime-pagination" class="mt-5">
             {{ $jurusans->links() }}
         </div>
     </div>

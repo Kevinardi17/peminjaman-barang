@@ -4,10 +4,10 @@
             <div class="flex flex-col items-center text-center mb-6">
                 <img src="{{ asset('images/logo-smkn5.png') }}" class="w-16 h-16 mb-4">
                 <h1 class="text-2xl font-extrabold text-slate-900">
-                    Lupa Password
+                    Lupa Kata Sandi
                 </h1>
                 <p class="text-slate-600 text-sm mt-2">
-                    Masukkan email kamu, kami akan kirim link untuk reset password.
+                    Masukkan email kamu, kami akan kirim link untuk reset kata sandi.
                 </p>
             </div>
 
@@ -42,7 +42,7 @@
                     type="submit"
                     class="w-full rounded-xl bg-blue-600 py-3.5 text-lg font-bold text-white hover:bg-blue-700 transition"
                 >
-                    Kirim Link Reset Password
+                    Kirim Link Reset Kata Sandi
                 </button>
 
                 <a

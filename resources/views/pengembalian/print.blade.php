@@ -1,118 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Cetak Bukti Pengembalian</title>
+    <meta charset="UTF-8">
+    <title>Cetak Bukti Pengembalian - {{ $peminjaman->no_peminjaman }}</title>
+    @vite(['resources/css/app.css'])
     <style>
-        .btn-print {
-            display: inline-block;
-            margin-bottom: 15px;
-            padding: 8px 14px;
-            background: #2563eb;
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            font-family: sans-serif;
-            font-size: 14px;
-        }
-
-        body {
-            font-family: sans-serif;
-            color: #333;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .status-tepat {
-            background-color: #10b981;
-        }
-
-        .status-terlambat {
-            background-color: #ef4444;
-        }
-
+        @page { size: A4; margin: 20mm; }
+        body { font-family: 'Inter', sans-serif; background-color: white; color: #1e293b; }
+        .print-container { max-width: 800px; margin: 0 auto; padding: 20px; }
         @media print {
-            .no-print {
-                display: none;
-            }
+            .no-print { display: none !important; }
+            .print-container { padding: 0; border: none !important; box-shadow: none !important; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: white !important; }
         }
+        .kop-surat { border-bottom: 3px solid #1e293b; margin-bottom: 2rem; padding-bottom: 1rem; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 antialiased">
 
-    <div class="no-print">
-        <button onclick="window.print()" class="btn-print">Print</button>
+    <!-- Action Bar (No Print) -->
+    <div class="no-print bg-white border-b border-slate-200 px-6 py-4 flex justify-end items-center sticky top-0 shadow-sm z-50">
+        <button onclick="window.print()" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold transition shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.728 10.154A4.5 4.5 0 0 1 11.25 6h1.5a4.5 4.5 0 0 1 4.522 4.154m-10.5 0A4.5 4.5 0 0 0 2.25 14.654v1.592c0 .828.672 1.5 1.5 1.5h16.5a1.5 1.5 0 0 0 1.5-1.5v-1.592a4.5 4.5 0 0 0-4.478-4.5M6.728 10.154 6.75 6.75m10.5 3.4v-3.4m-10.5 3.4h10.5M8.25 18.75h7.5m-7.5-1.5h7.5" />
+            </svg>
+            Cetak Bukti Pengembalian
+        </button>
     </div>
 
-    <h2>Bukti Pengembalian Barang</h2>
+    <!-- Document -->
+    <div class="print-container bg-white shadow-xl md:my-8 md:rounded-xl md:border border-slate-200 min-h-[297mm]">
+        <!-- KOP Surat -->
+        <div class="kop-surat flex items-center gap-6">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-24 h-24 object-contain">
+            <div class="flex-1 text-center pr-24">
+                <h1 class="text-2xl font-bold uppercase tracking-wide text-slate-900">SMK N 5 Bandar Lampung</h1>
+                <p class="text-slate-600 font-medium mt-1">Sistem Manajemen Peminjaman Barang Inventaris</p>
+                <p class="text-sm text-slate-500">Jl. Pangeran Tirtayasa, Sukabumi, Bandar Lampung</p>
+            </div>
+        </div>
 
-    <table cellpadding="3" cellspacing="0">
-        <tr>
-            <td><strong>No Peminjaman</strong></td>
-            <td>: {{ $peminjaman->no_peminjaman }}</td>
-        </tr>
-        <tr>
-            <td><strong>Nama Peminjam</strong></td>
-            <td>: {{ $peminjaman->user->name ?? '-' }}</td>
-        </tr>
-        <tr>
-            <td><strong>Tanggal Pinjam</strong></td>
-            <td>: {{ $peminjaman->tanggal_pinjam }}</td>
-        </tr>
-        <tr>
-            <td><strong>Rencana Kembali</strong></td>
-            <td>: {{ $peminjaman->tanggal_rencana_kembali }}</td>
-        </tr>
-        <tr>
-            <td><strong>Tanggal Dikembalikan</strong></td>
-            <td>: {{ $peminjaman->tanggal_kembali }}</td>
-        </tr>
-        <tr>
-            <td><strong>Keterlambatan</strong></td>
-            <td>: 
-                @if($peminjaman->status_keterlambatan === 'terlambat')
-                    <span class="status-badge status-terlambat">Terlambat</span>
-                @else
-                    <span class="status-badge status-tepat">Tepat Waktu</span>
-                @endif
-            </td>
-        </tr>
-        <tr>
-            <td><strong>Petugas Penerima</strong></td>
-            <td>: {{ $peminjaman->petugasPengembalian->name ?? '-' }}</td>
-        </tr>
-    </table>
+        <div class="text-center mb-8">
+            <h2 class="text-xl font-bold text-slate-800 uppercase underline underline-offset-4">Bukti Pengembalian Barang</h2>
+            <p class="text-slate-500 mt-2 font-medium">Nomor Referensi: <span class="text-slate-800">{{ $peminjaman->no_peminjaman }}</span></p>
+        </div>
 
-    <hr style="margin: 20px 0;">
+        <!-- Info Grid -->
+        <div class="grid grid-cols-2 gap-6 mb-8 text-sm bg-slate-50 p-6 rounded-xl border border-slate-200">
+            <div class="space-y-3">
+                <div class="grid grid-cols-3">
+                    <span class="text-slate-500 font-medium">Nama Peminjam</span>
+                    <span class="col-span-2 font-semibold text-slate-800">: {{ $peminjaman->user->name ?? '-' }}</span>
+                </div>
+                <div class="grid grid-cols-3">
+                    <span class="text-slate-500 font-medium">Tanggal Pinjam</span>
+                    <span class="col-span-2 font-semibold text-slate-800">: {{ \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->translatedFormat('d F Y') }}</span>
+                </div>
+                <div class="grid grid-cols-3">
+                    <span class="text-slate-500 font-medium">Batas Waktu</span>
+                    <span class="col-span-2 font-semibold text-slate-800">: {{ \Carbon\Carbon::parse($peminjaman->tanggal_rencana_kembali)->translatedFormat('d F Y') }}</span>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="grid grid-cols-3">
+                    <span class="text-slate-500 font-medium">Tgl Dikembalikan</span>
+                    <span class="col-span-2 font-semibold text-slate-800">: {{ \Carbon\Carbon::parse($peminjaman->tanggal_kembali)->translatedFormat('d F Y') }}</span>
+                </div>
+                <div class="grid grid-cols-3">
+                    <span class="text-slate-500 font-medium">Keterlambatan</span>
+                    <span class="col-span-2 font-semibold text-slate-800 flex items-center gap-2">: 
+                        @if($peminjaman->status_keterlambatan === 'terlambat')
+                            <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold border border-red-200">TERLAMBAT</span>
+                        @else
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-xs font-bold border border-emerald-200">TEPAT WAKTU</span>
+                        @endif
+                    </span>
+                </div>
+                <div class="grid grid-cols-3">
+                    <span class="text-slate-500 font-medium">Petugas Penerima</span>
+                    <span class="col-span-2 font-semibold text-slate-800">: {{ $peminjaman->petugasPengembalian->name ?? '-' }}</span>
+                </div>
+            </div>
+        </div>
 
-    <h3>Rincian Barang Dikembalikan</h3>
-    <table border="1" cellpadding="8" cellspacing="0" width="100%">
-        <tr style="background-color: #f1f5f9;">
-            <th align="left">Nama Barang</th>
-            <th align="center">Jumlah</th>
-        </tr>
+        <!-- Table -->
+        <h3 class="text-lg font-bold text-slate-800 mb-4">Rincian Barang Dikembalikan</h3>
+        <table class="w-full text-left border-collapse mb-12">
+            <thead>
+                <tr class="bg-slate-100 border-y-2 border-slate-300">
+                    <th class="py-3 px-4 font-bold text-slate-800 w-16 text-center">No</th>
+                    <th class="py-3 px-4 font-bold text-slate-800">Nama Barang</th>
+                    <th class="py-3 px-4 font-bold text-slate-800 w-32 text-center">Jumlah</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+                @foreach($peminjaman->details as $index => $detail)
+                <tr>
+                    <td class="py-3 px-4 text-center text-slate-600 border-b border-slate-200">{{ $index + 1 }}</td>
+                    <td class="py-3 px-4 font-medium text-slate-800 border-b border-slate-200">{{ $detail->barang->nama_barang }}</td>
+                    <td class="py-3 px-4 text-center font-semibold text-slate-800 border-b border-slate-200">{{ $detail->jumlah }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
 
-        @foreach($peminjaman->details as $detail)
-        <tr>
-            <td>{{ $detail->barang->nama_barang }}</td>
-            <td align="center">{{ $detail->jumlah }}</td>
-        </tr>
-        @endforeach
-    </table>
-
-    <div style="margin-top: 50px; text-align: right;">
-        <p>Petugas Jurusan,</p>
-        <br><br><br>
-        <p><strong>{{ $peminjaman->petugasPengembalian->name ?? '___________________' }}</strong></p>
+        <!-- Signatures -->
+        <div class="flex justify-between items-end pt-8">
+            <div class="text-center w-64">
+                <p class="text-slate-600 mb-16">Peminjam yang Mengembalikan,</p>
+                <p class="font-bold text-slate-800 underline">{{ $peminjaman->user->name ?? '___________________' }}</p>
+                <p class="text-sm text-slate-500 mt-1">NIP/NIS: ......................</p>
+            </div>
+            <div class="text-center w-64">
+                <p class="text-slate-600 mb-16">Petugas Penerima,</p>
+                <p class="font-bold text-slate-800 underline">{{ $peminjaman->petugasPengembalian->name ?? '___________________' }}</p>
+                <p class="text-sm text-slate-500 mt-1">NIP: ......................</p>
+            </div>
+        </div>
     </div>
-
 </body>
 </html>

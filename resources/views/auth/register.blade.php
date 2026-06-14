@@ -1,15 +1,15 @@
 <x-guest-layout>
-    <div class="w-full max-w-md">
-        <div class="bg-white rounded-[22px] shadow-lg border border-slate-200 px-8 py-10">
-            <div class="flex flex-col items-center text-center mb-8">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo SMKN 5" class="w-24 h-24 object-contain mb-4">
-                <h1 class="text-xl md:text-2xl font-semibold text-slate-900">
+    <div class="w-full max-w-3xl">
+        <div class="bg-white rounded-[20px] shadow-lg border border-slate-200 px-6 py-8">
+            <div class="flex flex-col items-center text-center mb-6">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo SMKN 5" class="w-20 h-20 object-contain mb-3">
+                <h1 class="text-lg md:text-xl font-semibold text-slate-900">
                     SMK N 5 BANDAR LAMPUNG
                 </h1>
                 <p class="text-slate-600 mt-2">Sistem Peminjaman Barang</p>
             </div>
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-5">
+            <form method="POST" action="{{ route('register') }}" class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-5">
                 @csrf
 
                 <div>
@@ -22,7 +22,7 @@
                         required
                         autofocus
                         autocomplete="name"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                     >
                     @error('name')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -38,7 +38,7 @@
                         value="{{ old('email') }}"
                         required
                         autocomplete="username"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                     >
                     @error('email')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -54,7 +54,7 @@
                         value="{{ old('no_hp') }}"
                         required
                         placeholder="08xxxxxxxxxx atau 628xxxxxxxxx"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                     >
                     <p class="mt-1 text-xs text-slate-500">Minimal 10 angka dan diawali dengan 08 atau 62.</p>
                     @error('no_hp')
@@ -68,7 +68,7 @@
                         id="jenis_pengguna"
                         name="jenis_pengguna"
                         required
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                     >
                         <option value="">-- Pilih --</option>
                         <option value="siswa" {{ old('jenis_pengguna') == 'siswa' ? 'selected' : '' }}>Siswa</option>
@@ -87,7 +87,7 @@
                         type="text"
                         value="{{ old('asal_kelas_jabatan') }}"
                         required
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                     >
                     @error('asal_kelas_jabatan')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -100,7 +100,7 @@
                         id="jurusan_id"
                         name="jurusan_id"
                         required
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                     >
                         <option value="">-- Pilih Jurusan --</option>
                         @foreach($jurusans as $jurusan)
@@ -115,7 +115,7 @@
                 </div>
 
                 <div>
-                    <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">Password <span class="text-red-500">*</span></label>
+                    <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">Kata Sandi <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <input
                             id="password"
@@ -123,7 +123,7 @@
                             type="password"
                             required
                             autocomplete="new-password"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500 pr-10"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500 pr-10"
                         >
                         <button type="button" onclick="togglePassword('password', 'eye-icon-pw')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-700">
                             <svg id="eye-icon-pw" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -139,7 +139,7 @@
                 </div>
 
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-semibold text-slate-700 mb-2">Konfirmasi Password <span class="text-red-500">*</span></label>
+                    <label for="password_confirmation" class="block text-sm font-semibold text-slate-700 mb-2">Konfirmasi Kata Sandi <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <input
                             id="password_confirmation"
@@ -147,7 +147,7 @@
                             type="password"
                             required
                             autocomplete="new-password"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500 pr-10"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500 pr-10"
                         >
                         <button type="button" onclick="togglePassword('password_confirmation', 'eye-icon-pw-conf')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-700">
                             <svg id="eye-icon-pw-conf" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -158,19 +158,21 @@
                     </div>
                 </div>
 
-                <button
-                    type="submit"
-                    class="w-full rounded-xl bg-blue-600 py-3.5 text-lg font-bold text-white shadow hover:bg-blue-700 transition"
-                >
-                    Register
-                </button>
+                <div class="md:col-span-2 space-y-4 pt-2">
+                    <button
+                        type="submit"
+                        class="w-full rounded-xl bg-blue-600 py-2.5 text-base font-bold text-white shadow hover:bg-blue-700 transition"
+                    >
+                        Daftar
+                    </button>
 
-                <a
-                    href="{{ route('login') }}"
-                    class="flex w-full items-center justify-center rounded-xl bg-slate-100 py-3.5 text-lg font-semibold text-slate-800 border border-slate-200 hover:bg-slate-200 transition"
-                >
-                    Sudah punya akun? Login
-                </a>
+                    <a
+                        href="{{ route('login') }}"
+                        class="flex w-full items-center justify-center rounded-xl bg-slate-100 py-2.5 text-base font-semibold text-slate-800 border border-slate-200 hover:bg-slate-200 transition"
+                    >
+                        Sudah punya akun? Login
+                    </a>
+                </div>
             </form>
         </div>
     </div>

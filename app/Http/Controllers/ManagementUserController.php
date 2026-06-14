@@ -103,7 +103,7 @@ class ManagementUserController extends Controller
             abort(403, 'Akses ditolak');
         }
 
-        if ($authUser->role === 'admin_jurusan' && $user->role !== 'peminjam') {
+        if ($authUser->role === 'admin_jurusan') {
             abort(403, 'Akses ditolak');
         }
 
@@ -127,7 +127,7 @@ class ManagementUserController extends Controller
             abort(403, 'Akses ditolak');
         }
 
-        if ($authUser->role === 'admin_jurusan' && $user->role !== 'peminjam') {
+        if ($authUser->role === 'admin_jurusan') {
             abort(403, 'Akses ditolak');
         }
 

@@ -43,12 +43,13 @@ class PeminjamanController extends Controller
         abort_if(auth()->user()->role !== 'peminjam', 403);
 
         $jurusans = Jurusan::orderBy('nama')->get();
-        $barangs = Barang::with('jurusan')
+        $kategoris = \App\Models\Kategori::orderBy('nama')->get();
+        $barangs = Barang::with(['jurusan', 'kategori'])
             ->where('stok', '>', 0)
             ->orderBy('nama_barang')
             ->get();
 
-        return view('peminjaman.create', compact('jurusans', 'barangs'));
+        return view('peminjaman.create', compact('jurusans', 'kategoris', 'barangs'));
     }
 
     public function store(Request $request)
