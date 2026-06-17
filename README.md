@@ -46,16 +46,16 @@ Proyek ini dibangun secara *Full-Stack* menggunakan ekosistem pengembangan moder
 
 Aplikasi ini telah di-hosting dan dapat diakses langsung melalui browser tanpa perlu melakukan instalasi lokal. 
 
-1. **Buka Browser**, disarankan menggunakan Google Chrome, Mozilla Firefox, atau Safari.
+1. **Buka Browser**, disarankan menggunakan Google Chrome.
 2. **Kunjungi Tautan**: Akses alamat website berikut:
    👉 **[https://vinlab.my.id/peminjamanbarang](https://vinlab.my.id/peminjamanbarang)**
-3. **Login Pengguna**: Gunakan kredensial (Email/Password) yang telah didaftarkan oleh Administrator untuk masuk ke dalam dasbor sesuai peran (Role) masing-masing.
+3. **Login Pengguna**: untuk admin bisa login menggunakan admin jurusan cth. "admin.dkv@gmail.com" dan passwordnya "password123"
 
 ---
 
 ## 💻 Cara Menjalankan Aplikasi (Instalasi Lokal)
 
-Untuk menjalankan proyek ini di komputer lokal untuk keperluan penilaian, silakan ikuti langkah-langkah berikut:
+Untuk menjalankan proyek ini di komputer lokal, silakan ikuti langkah-langkah berikut:
 
 ### Prasyarat:
 Pastikan komputer Anda telah terinstal **PHP (>= 8.3)**, **Composer**, **Node.js & NPM**, serta **Database Server** (seperti XAMPP / MySQL).
