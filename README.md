@@ -47,9 +47,8 @@ Proyek ini dibangun secara *Full-Stack* menggunakan ekosistem pengembangan moder
 Aplikasi ini telah di-hosting dan dapat diakses langsung melalui browser tanpa perlu melakukan instalasi lokal. 
 
 1. **Buka Browser**, disarankan menggunakan Google Chrome.
-2. **Kunjungi Tautan**: Akses alamat website berikut:
-   👉 **[https://vinlab.my.id/peminjamanbarang](https://vinlab.my.id/peminjamanbarang)**
-3. **Login Pengguna**: untuk admin bisa login menggunakan admin jurusan cth. "admin.dkv@gmail.com" dan passwordnya "password123"
+2. **Kunjungi Tautan**: Akses alamat website berikut: **[https://vinlab.my.id/peminjamanbarang](https://vinlab.my.id/peminjamanbarang)**
+3. **Login Pengguna**: untuk admin bisa login menggunakan admin jurusan cth. "admin.dkv@gmail.com" dan passwordnya "password123". Untuk superadmin bisa menggunakan "superadmin@gmail.com" dan passwordnya "password123".
 
 ---
 
