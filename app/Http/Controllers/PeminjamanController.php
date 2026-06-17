@@ -148,7 +148,7 @@ class PeminjamanController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id != $user->jurusan_id) {
             abort(403);
         }
 
@@ -158,6 +158,7 @@ class PeminjamanController extends Controller
 
         $request->validate([
             'foto_peminjaman' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'nama_petugas_peminjaman' => ['required', 'string', 'max:255'],
         ]);
 
         DB::transaction(function () use ($request, $peminjaman, $user) {
@@ -176,6 +177,7 @@ class PeminjamanController extends Controller
             $peminjaman->update([
                 'status' => 'dipinjam',
                 'petugas_peminjaman_id' => $user->id,
+                'nama_petugas_peminjaman' => $request->nama_petugas_peminjaman,
                 'foto_peminjaman' => $fotoPath,
             ]);
         });
@@ -187,7 +189,7 @@ class PeminjamanController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id != $user->jurusan_id) {
             abort(403);
         }
 
@@ -207,7 +209,7 @@ class PeminjamanController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id != $user->jurusan_id) {
             abort(403);
         }
 
@@ -234,7 +236,7 @@ class PeminjamanController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id != $user->jurusan_id) {
             abort(403);
         }
 
@@ -307,7 +309,7 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Hanya riwayat selesai yang dapat dihapus.');
         }
 
-        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id != $user->jurusan_id) {
             abort(403);
         }
 
@@ -320,10 +322,10 @@ class PeminjamanController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'peminjam' && $peminjaman->user_id !== $user->id) {
+        if ($user->role === 'peminjam' && $peminjaman->user_id != $user->id) {
             abort(403);
         }
-        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id != $user->jurusan_id) {
             abort(403);
         }
 
@@ -334,7 +336,7 @@ class PeminjamanController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id != $user->jurusan_id) {
             abort(403);
         }
 
@@ -349,10 +351,10 @@ class PeminjamanController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'peminjam' && $peminjaman->user_id !== $user->id) {
+        if ($user->role === 'peminjam' && $peminjaman->user_id != $user->id) {
             abort(403);
         }
-        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id !== $user->jurusan_id) {
+        if ($user->role === 'admin_jurusan' && $peminjaman->jurusan_tujuan_id != $user->jurusan_id) {
             abort(403);
         }
 

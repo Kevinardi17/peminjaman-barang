@@ -20,6 +20,7 @@ class Peminjaman extends Model
         'foto_peminjaman',
         'foto_pengembalian',
         'petugas_peminjaman_id',
+        'nama_petugas_peminjaman',
         'petugas_pengembalian_id',
         'status_keterlambatan'
     ];

@@ -103,7 +103,7 @@
             </div>
             <div class="text-center w-64">
                 <p class="text-slate-600 mb-16">Mengetahui,<br>Admin Jurusan</p>
-                <p class="font-bold text-slate-800 underline">......................................</p>
+                <p class="font-bold text-slate-800 underline">{{ $peminjaman->nama_petugas_peminjaman ?? $peminjaman->petugasPeminjaman->name ?? '......................................' }}</p>
                 <p class="text-sm text-slate-500 mt-1">NIP: ......................</p>
             </div>
         </div>

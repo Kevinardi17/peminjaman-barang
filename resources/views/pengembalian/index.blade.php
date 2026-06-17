@@ -110,7 +110,8 @@
     <script>
         function openModalKembalikan(id, no) {
             document.getElementById('modalNoPeminjaman').textContent = no;
-            document.getElementById('formKembalikan').action = `/pengembalian/${id}`;
+            let actionUrl = "{{ route('pengembalian.kembalikan', 'ID_PLACEHOLDER') }}";
+            document.getElementById('formKembalikan').action = actionUrl.replace('ID_PLACEHOLDER', id);
             const modal = document.getElementById('modalKembalikan');
             modal.classList.remove('hidden');
             modal.classList.add('flex');

@@ -132,6 +132,10 @@
                     <form id="formSetuju" method="POST" enctype="multipart/form-data" class="space-y-4">
                         @csrf
                         <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Nama Petugas <span class="text-red-500">*</span></label>
+                            <input type="text" name="nama_petugas_peminjaman" required placeholder="Masukkan nama petugas yang memproses" class="block w-full text-sm border border-slate-300 rounded-xl px-3 py-2 focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Foto Bukti Peminjaman <span class="text-red-500">*</span></label>
                             <input type="file" name="foto_peminjaman" required class="block w-full text-sm border border-slate-300 rounded-xl px-3 py-2 focus:ring-green-500 focus:border-green-500">
                         </div>
@@ -173,7 +177,8 @@
         <script>
             function openModalSetuju(id, no) {
                 document.getElementById('modalSetujuNo').textContent = no;
-                document.getElementById('formSetuju').action = `/peminjaman/${id}/approve`;
+                let actionUrl = "{{ route('peminjaman.approve', 'ID_PLACEHOLDER') }}";
+                document.getElementById('formSetuju').action = actionUrl.replace('ID_PLACEHOLDER', id);
                 const modal = document.getElementById('modalSetuju');
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
@@ -188,7 +193,8 @@
 
             function openModalTolak(id, no) {
                 document.getElementById('modalTolakNo').textContent = no;
-                document.getElementById('formTolak').action = `/peminjaman/${id}/reject`;
+                let actionTolakUrl = "{{ route('peminjaman.reject', 'ID_PLACEHOLDER') }}";
+                document.getElementById('formTolak').action = actionTolakUrl.replace('ID_PLACEHOLDER', id);
                 const modal = document.getElementById('modalTolak');
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');

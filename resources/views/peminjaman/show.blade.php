@@ -57,7 +57,7 @@
                 @if($peminjaman->petugasPeminjaman)
                     <div>
                         <h3 class="text-sm font-semibold text-slate-500 mb-1">Petugas Peminjaman</h3>
-                        <p class="text-slate-800 font-medium">{{ $peminjaman->petugasPeminjaman->name }}</p>
+                        <p class="text-slate-800 font-medium">{{ $peminjaman->nama_petugas_peminjaman ?? $peminjaman->petugasPeminjaman->name }}</p>
                     </div>
                 @endif
             </div>
