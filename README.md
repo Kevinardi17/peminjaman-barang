@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel Logo">
+  <img src="https://www.unila.ac.id/wp-content/uploads/2024/08/Logo-Unila-Statuta-PNG-300x296.png" width="300" alt="Laravel Logo">
   
   # LAPORAN UAS - MATA KULIAH WEB FRAMEWORK (SEMESTER 6)
   **Sistem Manajemen Peminjaman Barang Inventaris (SMK N 5 Bandar Lampung)**
@@ -8,8 +8,8 @@
 ---
 
 ## 👨‍🎓 Identitas Mahasiswa
-- **Nama:** Kevin Ardi Setyawan 
-- **NPM:** 2313025057
+- **Nama:** Kevin Ardi Setyawan *(Silakan sesuaikan/tambahkan)*
+- **NPM:** [NPM Anda]
 - **Mata Kuliah:** Web Framework
 - **Semester:** 6
 
@@ -42,7 +42,18 @@ Proyek ini dibangun secara *Full-Stack* menggunakan ekosistem pengembangan moder
 
 ---
 
-## Cara Menjalankan Aplikasi (Instalasi Lokal)
+## 🌐 Cara Akses Aplikasi Secara Online
+
+Aplikasi ini telah di-hosting dan dapat diakses langsung melalui browser tanpa perlu melakukan instalasi lokal. 
+
+1. **Buka Browser**, disarankan menggunakan Google Chrome, Mozilla Firefox, atau Safari.
+2. **Kunjungi Tautan**: Akses alamat website berikut:
+   👉 **[https://vinlab.my.id/peminjamanbarang](https://vinlab.my.id/peminjamanbarang)**
+3. **Login Pengguna**: Gunakan kredensial (Email/Password) yang telah didaftarkan oleh Administrator untuk masuk ke dalam dasbor sesuai peran (Role) masing-masing.
+
+---
+
+## 💻 Cara Menjalankan Aplikasi (Instalasi Lokal)
 
 Untuk menjalankan proyek ini di komputer lokal untuk keperluan penilaian, silakan ikuti langkah-langkah berikut:
 
@@ -104,3 +115,4 @@ Pastikan komputer Anda telah terinstal **PHP (>= 8.3)**, **Composer**, **Node.js
 <div align="center">
   <i>Dikembangkan menggunakan Laravel Framework untuk memenuhi tugas akhir mata kuliah Web Framework.</i>
 </div>
+
