@@ -8,8 +8,8 @@
 ---
 
 ## 👨‍🎓 Identitas Mahasiswa
-- **Nama:** Kevin Ardi Setyawan *(Silakan sesuaikan/tambahkan)*
-- **NPM:** [NPM Anda]
+- **Nama:** Kevin Ardi Setyawan 
+- **NPM:** 2313025057
 - **Mata Kuliah:** Web Framework
 - **Semester:** 6
 
