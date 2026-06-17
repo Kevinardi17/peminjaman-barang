@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel Logo">
+  <img src="https://www.unila.ac.id/wp-content/uploads/2024/08/Logo-Unila-Statuta-PNG-300x296.png" width="300" alt="Laravel Logo">
   
   # LAPORAN UAS - MATA KULIAH WEB FRAMEWORK (SEMESTER 6)
   **Sistem Manajemen Peminjaman Barang Inventaris (SMK N 5 Bandar Lampung)**
@@ -8,8 +8,8 @@
 ---
 
 ## 👨‍🎓 Identitas Mahasiswa
-- **Nama:** Kevin Ardi Setyawan *(Silakan sesuaikan/tambahkan)*
-- **NPM:** [NPM Anda]
+- **Nama:** Kevin Ardi Setyawan 
+- **NPM:** 2313025057
 - **Mata Kuliah:** Web Framework
 - **Semester:** 6
 
@@ -42,9 +42,19 @@ Proyek ini dibangun secara *Full-Stack* menggunakan ekosistem pengembangan moder
 
 ---
 
-## Cara Menjalankan Aplikasi (Instalasi Lokal)
+## 🌐 Cara Akses Aplikasi Secara Online
 
-Untuk menjalankan proyek ini di komputer lokal untuk keperluan penilaian, silakan ikuti langkah-langkah berikut:
+Aplikasi ini telah di-hosting dan dapat diakses langsung melalui browser tanpa perlu melakukan instalasi lokal. 
+
+1. **Buka Browser**, disarankan menggunakan Google Chrome.
+2. **Kunjungi Tautan**: Akses alamat website berikut: **[https://vinlab.my.id/peminjamanbarang](https://vinlab.my.id/peminjamanbarang)**
+3. **Login Pengguna**: untuk admin bisa login menggunakan admin jurusan cth. "admin.dkv@gmail.com" dan passwordnya "password123". Untuk superadmin bisa menggunakan "superadmin@gmail.com" dan passwordnya "password123".
+
+---
+
+## 💻 Cara Menjalankan Aplikasi (Instalasi Lokal)
+
+Untuk menjalankan proyek ini di komputer lokal, silakan ikuti langkah-langkah berikut:
 
 ### Prasyarat:
 Pastikan komputer Anda telah terinstal **PHP (>= 8.3)**, **Composer**, **Node.js & NPM**, serta **Database Server** (seperti XAMPP / MySQL).
@@ -104,3 +114,4 @@ Pastikan komputer Anda telah terinstal **PHP (>= 8.3)**, **Composer**, **Node.js
 <div align="center">
   <i>Dikembangkan menggunakan Laravel Framework untuk memenuhi tugas akhir mata kuliah Web Framework.</i>
 </div>
+
